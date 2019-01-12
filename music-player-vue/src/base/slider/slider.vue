@@ -3,6 +3,9 @@
     <div class="slider-group" ref="sliderGroup">
       <slot></slot>
     </div>
+    <div class="dots">
+      <span class="dot" v-for="(item,index) in dots" :class="{active: currentPageIndex === index}"></span>
+    </div>
   </div>
 </template>
 
@@ -10,6 +13,12 @@
 import BScroll from "better-scroll";
 import {addClass} from "commons/js/dom";
 export default {
+  data() {
+    return {
+      dots: [],
+      currentPageIndex: 0,
+    }
+  },
   props: {
     loop: {
       type: Boolean,
@@ -27,12 +36,24 @@ export default {
   mounted() {
     setTimeout(() => {
       this._setSliderWidth();
+      this._initDots();
       this._initSlider();
+
+      if(this.autoPlay){
+        this._play()
+      }
     }, 20)
     //browser default refresh time is at least 17ms
+    window.addEventListener('resize',() => {
+      if (!this.slider) {
+        return
+      }
+      this._setSliderWidth(true)
+      this.slider.refresh()
+    })
   },
   methods: {
-    _setSliderWidth(){
+    _setSliderWidth(isResize){
       this.children = this.$refs.sliderGroup.children;
 
       let width = 0;
@@ -44,14 +65,15 @@ export default {
         width += sliderWidth;
       }
 
-      if(this.loop){
+      if(this.loop && !isResize){
         width += 2 * sliderWidth;
-        console.log(width/sliderWidth)
       }
       this.$refs.sliderGroup.style.width = width + 'px'
     },
+    _initDots(){
+      this.dots = new Array(this.children.length)
+    },
     _initSlider() {
-      console.log(BScroll)
       this.slider = new BScroll(this.$refs.slider,{
         scrollX: true,
         scrollY: false,
@@ -63,8 +85,25 @@ export default {
         },
         click: true,
       })
+
+      this.slider.on('scrollEnd',() => {
+        const pageIndex = this.slider.getCurrentPage().pageX;
+        this.currentPageIndex = pageIndex;
+        if (this.autoPlay) {
+          clearTimeout(this.timer)
+          this._play()
+        }
+      })
+    },
+    _play() {
+      this.timer = setTimeout(() => {
+        this.slider.next();
+      },this.interval)
     }
-  }
+  },
+  destroyed() {
+    clearTimeout(this.timer)
+  },
 }
 
 
