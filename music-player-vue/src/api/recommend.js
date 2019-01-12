@@ -1,20 +1,17 @@
 import jsonp from 'commons/js/jsonp';
-import {commonParams, options} from './config';
+import {commonParams, options, DISC_URL, RECOMMEND_URL} from './config';
 import axios from 'axios';
 export function getRecommend() {
-  const url = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg'
-
   const data = Object.assign({},commonParams,{
     platform: 'h5',
     uin: 0,
     needNewCode: 1
   })
-  return jsonp(url,data,options)
+  return jsonp(RECOMMEND_URL,data,options)
 }
 
 
 export function getDiscList() {
-  const url = '/api/getDiscList';
   const data = Object.assign({}, {
     g_tk: 5381,
     notice: 0,
@@ -31,10 +28,9 @@ export function getDiscList() {
     format: 'json'
   })
 
-  return axios.get(url, {
+  return axios.get(DISC_URL, {
     params: data
   }).then(res => {
-    console.log(res.data)
     return Promise.resolve(res.data)
   })
 }
@@ -56,6 +52,7 @@ export function getSongList(disstid) {
   return axios.get(url, {
     params: data
   }).then((res) => {
+    console.log(res.data)
     return Promise.resolve(res.data)
   })
 }
