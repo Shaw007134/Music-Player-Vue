@@ -6,7 +6,7 @@
         <slider>
           <div v-for="item in recommends">
             <a :href="item.linkUrl">
-              <img :src="item.picUrl">
+              <img @load="loadImage" :src="item.picUrl">
             </a>
           </div>
         </slider>
@@ -16,7 +16,7 @@
         <ul>
           <li v-for="item in discList" class="item">
             <div class="icon">
-              <img :src="item.imgurl" height="60" width="60">
+              <img v-lazy="item.imgurl" height="60" width="60">
             </div>
             <div class="text">
               <h2 class="name" v-html="item.creator.name"></h2>
@@ -26,6 +26,9 @@
         </ul>
       </div>
      </div>
+     <div class="loading-container" v-show="!discList.length">
+       <loading></loading>
+     </div>
     </scroll>
   </div>
 </template>
@@ -33,6 +36,7 @@
 <script>
   import Slider from 'base/slider/slider';
   import Scroll from 'base/scroll/scroll';
+  import Loading from "base/loading/loading";
   import {getRecommend, getDiscList} from 'api/recommend';
   import {ERR_OK} from 'api/config';
   export default {
@@ -43,8 +47,10 @@
       }
     },
     created() {
-      this._getRecommend()
+      // setTimeout(()=>{
       this._getDiscList()
+      // },2000)
+      this._getRecommend()
     },
     methods: {
       _getRecommend(){
@@ -61,10 +67,17 @@
           }
         })
       },
+      loadImage() {
+        if (!this.checkLoaded) {
+          this.$refs.scroll.refresh();
+          this.checkLoaded = true;
+        }
+      }
     },
     components: {
       Slider,
-      Scroll
+      Scroll,
+      Loading
     }
   }
 </script>
