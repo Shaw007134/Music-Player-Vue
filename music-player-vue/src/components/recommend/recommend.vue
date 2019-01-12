@@ -1,6 +1,6 @@
 <template>
   <div class="recommend">
-    <scroll class="recommend-content" :data="discList">
+    <scroll ref="scroll" class="recommend-content" :data="discList">
      <div>
       <div v-if="recommends.length" class="slider-wrapper">
         <slider>
@@ -44,13 +44,12 @@
       return {
         recommends: [],
         discList: [],
+        // checkLoaded: false
       }
     },
     created() {
-      // setTimeout(()=>{
-      this._getDiscList()
-      // },2000)
       this._getRecommend()
+      this._getDiscList()
     },
     methods: {
       _getRecommend(){
