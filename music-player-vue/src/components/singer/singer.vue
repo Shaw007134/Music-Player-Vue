@@ -1,6 +1,6 @@
 <template>
   <div class="singer">
-    <list-view :data="singers"></list-view>
+    <list-view @select="selectSinger" :data="singers"></list-view>
     <router-view></router-view>
   </div>
 </template>
@@ -10,6 +10,8 @@ import {getSingerList} from 'api/singer';
 import {ERR_OK} from 'api/config';
 import Singer from 'commons/js/singer';
 import ListView from 'base/listview/listview';
+import {mapMutations} from 'vuex';
+
 const HOT_NAME = '热门'
 const HOT_SINGER_LEN = 10
 export default {
@@ -22,6 +24,15 @@ export default {
     this._getSingerList()
   },
   methods: {
+    selectSinger(singer) {
+      this.$router.push({
+        path: `/singer/${singer.id}`
+      })
+      this.setSinger(singer)
+      //通过action传入payload实现mutation的提交
+      //实际调用了this.$store.commit('SET_SINGER') 
+      //执行了mutations中的SET_SINGER函数
+    },
     _getSingerList() {
       getSingerList().then((res) => {
         if(res.code === ERR_OK){
@@ -74,7 +85,14 @@ export default {
         })
       }
       return hot.concat(ret).concat(other)
-    }
+    },
+    //扩展运算符调用mapMutations,做一个对象映射，将方法与常量名映射起来
+    //然后通过...将此对象混入到methods对象中
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+      // 将 `this.setSinger()` 映射为 `this.$store.commit('SET_SINGER')`
+      // 可以在组件中使用 this.$store.commit('xxx') 提交 mutation，或者使用 mapMutations 辅助函数将组件中的 methods 映射为 store.commit 调用（需要在根节点注入 store）
+    })
   },
   components: {
     ListView

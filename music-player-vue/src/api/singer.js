@@ -6,7 +6,7 @@ export function getSingerList() {
     channel: 'singer',
     page: 'list',
     key: 'all_all_all',
-    pagesize: 100,
+    pagesize: 200,
     pagenum: 1,
     g_tk: 1471438518,
     loginUin: 0,
@@ -23,20 +23,20 @@ export function getSingerList() {
 }
 
 export function getSingerDetail(singerId) {
-  const data = Object.assign({}, {
+  const data = Object.assign({}, commonParams,{
     g_tk: 1471438518,
     loginUin: 0,
     hostUin: 0,
     format: jsonp,
-    inCharset: 'utf8',
-    outCharset: 'utf-8',
-    notice: 0,
+    // inCharset: 'utf8',
+    // outCharset: 'utf-8',
+    // notice: 0,
     platform: 'yqq',
     needNewCode: 0,
     singermid: singerId,
     order: 'listen',
     begin: 0,
-    num: 200,
+    num: 100,
     songstatus: 1
   })
   return jsonp(SINGER_DETAIL_URL, data, options)
