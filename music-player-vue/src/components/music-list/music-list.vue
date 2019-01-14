@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="bg-image" :style="bgStyle" ref="bgImage">
-      <div class="filter"></div>
+      <div class="filter" ref="filter"></div>
     </div>
     <div class="bg-layer" ref="layer"></div>
     <scroll :data="songs" 
@@ -104,9 +104,20 @@ export default {
   watch: {
     scrollY(newY) {
       let zIndex = 0
+      let scale = 1
+      let blur = 0
       let translateY = Max.max(this.minTranslateY,newY)
       this.$refs.layer.style['transform'] = `transfrom3d(0,${translateY}px,0)`
       this.$refs.layer.style['webkittransform'] = `transfrom3d(0,${translateY}px,0)`
+      const percent = Math.abs(newY / this.imageHeight)
+      if(newY > 0){
+        scale = 1 + percent
+        zIndex = 10
+      }else{
+        blur = Math.min(20 * percent, 20)
+      }
+      this.$refs.filter.style['backdrop-filter'] = `blur(${blur}px)`
+      this.$refs.filter.style['webkitbackdrop-filter'] = `blur(${blur}px)`
       if(newY < this.minTranslateY) {
         zIndex = 10
         this.$refs.bgImage.style.paddingTop = 0
@@ -116,6 +127,8 @@ export default {
         this.$refs.bgImage.style.paddingTop = '42%'
         this.$refs.bgImage.style.height = 0
       }
+      this.$refs.layer.style['transform'] = `scale(${scale})`
+      this.$refs.layer.style['webkittransform'] = `scale(${scale})`
       this.$refs.bgImage.style.zIndex = zIndex
     }
   },
@@ -138,7 +151,6 @@ export default {
   right: 0;
   bottom: 0;
   background-color: $color-background;
-  font-size: 0;
   .back {
     position: absolute;
     top: 0;
