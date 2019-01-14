@@ -5,17 +5,24 @@
       <i class="icon-back"></i>
     </div>
     <!--歌手信息-->
-    <div class="album" ref="album">
-      <div class="avatar">
-        <img :src=avatar>
-      </div>
-      <div class="info">
-        <h1 class="name" v-html="name"></h1>
-        <div class="fans" >{{fans}}</div>
-        <div class="desc" v-html="desc"></div>
-      </div>
-    </div>
+    
     <div class="bg-image" :style="bgStyle" ref="bgImage">
+      <div class="album" v-show="songs.length" ref="album">
+        <div class="avatar">
+          <img :src=avatar>
+        </div>
+        <div class="info">
+          <h1 class="name" v-html="name"></h1>
+          <div class="fans" >{{fans}}</div>
+          <div class="desc" v-html="desc"></div>
+        </div>
+      </div>
+       <div class="play-wrapper">
+        <div ref="playBtn" v-show="songs.length>0" class="play">
+          <i class="icon-play"></i>
+          <span class="text">随机播放全部</span>
+        </div>
+      </div>
       <div class="filter" ref="filter"></div>
     </div>
     <div class="bg-layer" ref="layer"></div>
@@ -30,6 +37,9 @@
       <div class="song-list-wrapper">
         <song-list :songs="songs"></song-list>
       </div>
+      <div class="loadingContainer" v-show="!songs.length">
+        <loading></loading>
+      </div>
     </scroll>
   </div>
 </template>
@@ -39,7 +49,8 @@ import {mapGetters,mapState} from 'vuex'
 import Scroll from 'base/scroll/scroll'
 import SongList from 'base/song-list/song-list'
 import {prefixStyle} from 'commons/js/dom'
-const RESERVED_HEIGHT = 40
+import Loading from 'base/loading/loading'
+const RESERVED_HEIGHT = 38
 const transform = prefixStyle('transform')
 const backdrop = prefixStyle('backdrop-filter')
 export default {
@@ -120,19 +131,22 @@ export default {
         zIndex = 10
       }else{
         blur = Math.min(20 * percent, 20)
-        this.$refs.album.style.zIndex = zIndex
       }
       this.$refs.filter.style[backdrop] = `blur(${blur}px)`
       if(newY < this.minTranslateY) {
         zIndex = 10
         this.$refs.bgImage.style.paddingTop = 0
         this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
+        this.$refs.playBtn.style.display = 'none'
+        this.$refs.album.style.display = 'none'
       }else {
-        this.$refs.bgImage.style.paddingTop = '42%'
+        this.$refs.bgImage.style.paddingTop = '62%'
         this.$refs.bgImage.style.height = 0
-        if(this.$refs.album.style.zIndex != 10){
-          this.$refs.album.style.zIndex = 10
-        } 10
+        this.$refs.playBtn.style.display = ''
+        this.$refs.album.style.display = ''
+        // if(this.$refs.album.style.zIndex != 10){
+        //   this.$refs.album.style.zIndex = 10
+        // } 10
       }
       this.$refs.bgImage.style[transform] = `scale(${scale})`
       this.$refs.bgImage.style.zIndex = zIndex
@@ -140,7 +154,8 @@ export default {
   },
   components: {
     Scroll,
-    SongList
+    SongList,
+    Loading
   }
 }
 </script>
@@ -212,7 +227,7 @@ export default {
   }
   .bg-image {
     position: relative;
-    padding-top: 43%;
+    padding-top: 62%;
     transform: scale(1);
     // filter: blur(36px);
     // z-index: 20;
