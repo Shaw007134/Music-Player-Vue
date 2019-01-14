@@ -12,11 +12,7 @@ export function getRecommend() {
 
 
 export function getDiscList() {
-  const data = Object.assign({}, {
-    g_tk: 5381,
-    notice: 0,
-    inCharset: 'utf8',
-    outCharset: 'utf-8',
+  const data = Object.assign({}, commonParams, {
     platform: 'yqq',
     hostUin: 0,
     sin: 0,

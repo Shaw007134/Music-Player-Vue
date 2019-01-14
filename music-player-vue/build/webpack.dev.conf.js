@@ -30,6 +30,21 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     before(app){
       // app.use('/api', apiRoutes)
       console.log(' before app')
+      app.get('/api/music',(req,res) => {
+        const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
+        
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          res.json(response.data)
+        }).catch(error => {
+          console.log(error)
+        })
+      })
       app.get('/api/getDiscList', (req, res) => {
         console.log('getDiscList')
         const url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
