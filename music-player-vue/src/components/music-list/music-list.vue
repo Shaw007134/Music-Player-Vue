@@ -5,7 +5,7 @@
       <i class="icon-back"></i>
     </div>
     <!--歌手信息-->
-    <div class="album">
+    <div class="album" ref="album">
       <div class="avatar">
         <img :src=avatar>
       </div>
@@ -62,7 +62,7 @@ export default {
     this.imageHeight = this.$refs.bgImage.clientHeight
     this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT
     this.$refs.list.$el.style.top = 
-      `${this.imageHeight}px`
+      `${this.imageHeight}px` 
   },
   computed: {
      ...mapGetters([
@@ -111,14 +111,16 @@ export default {
       let zIndex = 0
       let scale = 1
       let blur = 0
-      let translateY = Max.max(this.minTranslateY,newY)
-      this.$refs.layer.style[transform] = `transfrom3d(0,${translateY}px,0)`
+      let translateY = Math.max(this.minTranslateY,newY)
+      this.$refs.layer.style[transform] = `translate3d(0,${translateY}px,0)`
       const percent = Math.abs(newY / this.imageHeight)
+      
       if(newY > 0){
         scale = 1 + percent
         zIndex = 10
       }else{
         blur = Math.min(20 * percent, 20)
+        this.$refs.album.style.zIndex = zIndex
       }
       this.$refs.filter.style[backdrop] = `blur(${blur}px)`
       if(newY < this.minTranslateY) {
@@ -126,11 +128,13 @@ export default {
         this.$refs.bgImage.style.paddingTop = 0
         this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
       }else {
-        zIndex = 10
         this.$refs.bgImage.style.paddingTop = '42%'
         this.$refs.bgImage.style.height = 0
+        if(this.$refs.album.style.zIndex != 10){
+          this.$refs.album.style.zIndex = 10
+        } 10
       }
-      this.$refs.layer.style[transform] = `scale(${scale})`
+      this.$refs.bgImage.style[transform] = `scale(${scale})`
       this.$refs.bgImage.style.zIndex = zIndex
     }
   },
@@ -247,8 +251,8 @@ export default {
       position: absolute;
       top: 0;
       left: 0;
-      bottom: 0;
-      right: 0;
+      width: 100%;
+      height: 100%;
       background-color: rgba(7, 17, 27, 0.4);
     }
   }
