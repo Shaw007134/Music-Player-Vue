@@ -66,13 +66,12 @@ export default {
     scrollToElement() {
       this.scroll && this.scroll.scrollToElement.apply(this.scroll,arguments)
     },
-    watch: {
-      data(){
-        console.log('watch')
-        setTimeout(() => {
-          this.refresh()
-        }, 20);
-      }
+  },
+  watch: {
+    data(){
+      setTimeout(() => {
+        this.refresh()
+      }, 20);
     }
   }
 }

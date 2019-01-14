@@ -1,10 +1,12 @@
 <template>
   <div class="music-list">
-    <div class="back">
+    <!--返回上一层-->
+    <div class=".back">
       <i class="icon-back"></i>
     </div>
-    <h1 class="title"></h1>
-    <div class="bg-image">
+    <!--歌手信息-->
+    <h1 class="name" v-html="name"></h1>
+    <div class="bg-image" :style="bgStyle">
       <div class="filter"></div>
     </div>
   </div>
@@ -12,7 +14,25 @@
 
 <script>
 export default {
-  
+  props: {
+    bgImage: {
+      type: String,
+      default: ''
+    },
+    songs: {
+      type: Array,
+      default: []
+    },
+    name: {
+      type: String,
+      default: ''
+    }
+  },
+  computed: {
+    bgStyle() {
+      return `background-image:url(${this.bgImage})`
+    }
+  }
 }
 </script>
 
@@ -29,7 +49,7 @@ export default {
   bottom: 0;
   background-color: $color-background;
   font-size: 0;
-  .back-btn {
+  .back {
     position: absolute;
     top: 0;
     left: 6px;
@@ -41,7 +61,7 @@ export default {
       color: $color-theme;
     }
   }
-  .list-title {
+  .name {
     position: absolute;
     top: 0;
     left: 10%;
@@ -67,7 +87,7 @@ export default {
       bottom: 20px;
       z-index: 50;
       width: 100%;
-      .play-btn {
+      .play {
         box-sizing: border-box;
         width: 135px;
         padding: 7px 0;
@@ -76,7 +96,7 @@ export default {
         border: 1px solid $color-theme;
         color: $color-theme;
         border-radius: 100px;
-        .icon-play, .play-content {
+        .icon-play, .text {
           display: inline-block;
           vertical-align: middle;
         }
@@ -84,7 +104,7 @@ export default {
           margin-right: 6px;
           font-size: $font-size-medium-x;
         }
-        .play-content {
+        .text {
           font-size: $font-size-small;
         }
       }
@@ -103,10 +123,15 @@ export default {
     height: 100%;
     background-color: $color-background;
   }
-  .songs-list-wrapper {
+  .list {
     position: fixed;
+    top: 0;
     bottom: 0; // top 在 mounted 钩子实现
     width: 100%;
+    background: $color-background;
+    .song-list-wrapper {
+      padding: 20px 30px;
+    }
     // overflow: hidden; // 设置 title 的 z-index 来实现相同效果
     .loading-wrapper {
       position: absolute;

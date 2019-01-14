@@ -7,12 +7,13 @@
           @scroll="scroll"
   >
     <ul>
-      <li v-for="group in data" class="list-group" ref="listgroup">
+      <li v-for="group in data" class="list-group" :key="group.key" ref="listgroup">
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul>
           <li @click="selectItem(item)"
               v-for="item in group.items" 
               class="list-group-item"
+              :key="item.key"
           >
             <img v-lazy="item.avatar" class="avatar">
             <span class="name">{{item.name}}</span>
@@ -27,6 +28,7 @@
             v-for="(item,index) in shortcutList" 
             class="item"
             :class="{'current': currentIndex===index}"
+            :key="item.key"
         >
           {{item}}
         </li>
@@ -53,11 +55,9 @@ export default {
     }
   },
   props: {
-    data() {
-      return {
-        type: Array,
-        default: []
-      }
+    data:{
+      type: Array,
+      default: []
     },
   },
   computed: {

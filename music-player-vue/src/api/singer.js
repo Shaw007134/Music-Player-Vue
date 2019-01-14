@@ -25,19 +25,19 @@ export function getSingerList() {
 export function getSingerDetail(singerId) {
   const data = Object.assign({}, commonParams,{
     g_tk: 1471438518,
-    loginUin: 0,
-    hostUin: 0,
+    uin: 0,
+    // loginUin: 0,
+    // hostUin: 0,
     format: jsonp,
-    // inCharset: 'utf8',
-    // outCharset: 'utf-8',
-    // notice: 0,
-    platform: 'yqq',
-    needNewCode: 0,
+    platform: 'h5page',
+    needNewCode: 1,
     singermid: singerId,
     order: 'listen',
+    from: 'h5',
     begin: 0,
     num: 100,
     songstatus: 1
   })
+  //根据歌手id获取其mid，以及其100首歌曲(res.data.list)中
   return jsonp(SINGER_DETAIL_URL, data, options)
 }
