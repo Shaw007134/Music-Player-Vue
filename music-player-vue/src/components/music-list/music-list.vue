@@ -1,7 +1,7 @@
 <template>
   <div class="music-list">
     <!--返回上一层-->
-    <div class="back">
+    <div class="back" @click="back">
       <i class="icon-back"></i>
     </div>
     <!--歌手信息-->
@@ -38,8 +38,10 @@
 import {mapGetters,mapState} from 'vuex' 
 import Scroll from 'base/scroll/scroll'
 import SongList from 'base/song-list/song-list'
-
+import {prefixStyle} from 'commons/js/dom'
 const RESERVED_HEIGHT = 40
+const transform = prefixStyle('transform')
+const backdrop = prefixStyle('backdrop-filter')
 export default {
   props: {
     songs: {
@@ -100,6 +102,9 @@ export default {
     scroll(pos) {
       this.scrollY = pos.y
     },
+    back() {
+      this.$router.back()
+    }
   },
   watch: {
     scrollY(newY) {
@@ -107,8 +112,7 @@ export default {
       let scale = 1
       let blur = 0
       let translateY = Max.max(this.minTranslateY,newY)
-      this.$refs.layer.style['transform'] = `transfrom3d(0,${translateY}px,0)`
-      this.$refs.layer.style['webkittransform'] = `transfrom3d(0,${translateY}px,0)`
+      this.$refs.layer.style[transform] = `transfrom3d(0,${translateY}px,0)`
       const percent = Math.abs(newY / this.imageHeight)
       if(newY > 0){
         scale = 1 + percent
@@ -116,8 +120,7 @@ export default {
       }else{
         blur = Math.min(20 * percent, 20)
       }
-      this.$refs.filter.style['backdrop-filter'] = `blur(${blur}px)`
-      this.$refs.filter.style['webkitbackdrop-filter'] = `blur(${blur}px)`
+      this.$refs.filter.style[backdrop] = `blur(${blur}px)`
       if(newY < this.minTranslateY) {
         zIndex = 10
         this.$refs.bgImage.style.paddingTop = 0
@@ -127,8 +130,7 @@ export default {
         this.$refs.bgImage.style.paddingTop = '42%'
         this.$refs.bgImage.style.height = 0
       }
-      this.$refs.layer.style['transform'] = `scale(${scale})`
-      this.$refs.layer.style['webkittransform'] = `scale(${scale})`
+      this.$refs.layer.style[transform] = `scale(${scale})`
       this.$refs.bgImage.style.zIndex = zIndex
     }
   },
