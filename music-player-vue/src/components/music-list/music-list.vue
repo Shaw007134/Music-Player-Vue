@@ -15,15 +15,31 @@
         <div class="desc" v-html="desc"></div>
       </div>
     </div>
-    <div class="bg-image" :style="bgStyle">
+    <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="filter"></div>
     </div>
+    <div class="bg-layer" ref="layer"></div>
+    <scroll :data="songs" 
+            class="list" 
+            ref="list"
+            :probe-type="probeType"
+            :listen-scroll="listenScroll"
+            @scroll="scroll"
+    >
+      <!-- scroll组件需要根据数据更新高度 -->
+      <div class="song-list-wrapper">
+        <song-list :songs="songs"></song-list>
+      </div>
+    </scroll>
   </div>
 </template>
 
 <script>
 import {mapGetters,mapState} from 'vuex' 
+import Scroll from 'base/scroll/scroll'
+import SongList from 'base/song-list/song-list'
 
+const RESERVED_HEIGHT = 40
 export default {
   props: {
     songs: {
@@ -31,8 +47,20 @@ export default {
       default: []
     },
   },
+  data() {
+    return {
+      scrollY: 0
+    }
+  },
   created() {
-
+    this.probeType = 3
+    this.listenScroll = true
+  },
+  mounted() {
+    this.imageHeight = this.$refs.bgImage.clientHeight
+    this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT
+    this.$refs.list.$el.style.top = 
+      `${this.imageHeight}px`
   },
   computed: {
      ...mapGetters([
@@ -68,7 +96,32 @@ export default {
       } catch (error) {
         return 0
       }
+    },
+    scroll(pos) {
+      this.scrollY = pos.y
+    },
+  },
+  watch: {
+    scrollY(newY) {
+      let zIndex = 0
+      let translateY = Max.max(this.minTranslateY,newY)
+      this.$refs.layer.style['transform'] = `transfrom3d(0,${translateY}px,0)`
+      this.$refs.layer.style['webkittransform'] = `transfrom3d(0,${translateY}px,0)`
+      if(newY < this.minTranslateY) {
+        zIndex = 10
+        this.$refs.bgImage.style.paddingTop = 0
+        this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
+      }else {
+        zIndex = 10
+        this.$refs.bgImage.style.paddingTop = '42%'
+        this.$refs.bgImage.style.height = 0
+      }
+      this.$refs.bgImage.style.zIndex = zIndex
     }
+  },
+  components: {
+    Scroll,
+    SongList
   }
 }
 </script>
@@ -106,6 +159,7 @@ export default {
     align-items: center;
     padding: 18px;
     margin-top: 30px;
+    margin-bottom: 30px;
     z-index: 40;
     .avatar {
       img {
@@ -140,10 +194,10 @@ export default {
   }
   .bg-image {
     position: relative;
-    padding-top: 70%;
+    padding-top: 43%;
     transform: scale(1);
-    filter: blur(36px);
-    z-index: -1;
+    // filter: blur(36px);
+    // z-index: 20;
     height: 0;
     width: 100%;
     transform-origin: top; // 更改变形原点
