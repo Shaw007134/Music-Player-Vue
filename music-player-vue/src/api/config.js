@@ -18,7 +18,7 @@ export const RECOMMEND_URL = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomep
 
 export const DISC_URL = '/api/getDiscList'
 
-export const VKEY_URL = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
+// export const VKEY_URL = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
 
 export const SINGER_URL = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg'
 

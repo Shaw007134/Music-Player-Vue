@@ -1,5 +1,5 @@
 import jsonp from 'commons/js/jsonp';
-import {commonParams, options, VKEY_URL} from 'api/config.js';
+import {commonParams} from 'api/config.js';
 import axios from 'axios'
 
 export default class Song {

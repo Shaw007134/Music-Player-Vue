@@ -1,11 +1,20 @@
 <template>
   <div class="music-list">
     <!--返回上一层-->
-    <div class=".back">
+    <div class="back">
       <i class="icon-back"></i>
     </div>
     <!--歌手信息-->
-    <h1 class="name" v-html="name"></h1>
+    <div class="album">
+      <div class="avatar">
+        <img :src=avatar>
+      </div>
+      <div class="info">
+        <h1 class="name" v-html="name"></h1>
+        <div class="fans" >{{fans}}</div>
+        <div class="desc" v-html="desc"></div>
+      </div>
+    </div>
     <div class="bg-image" :style="bgStyle">
       <div class="filter"></div>
     </div>
@@ -13,24 +22,52 @@
 </template>
 
 <script>
+import {mapGetters,mapState} from 'vuex' 
+
 export default {
   props: {
-    bgImage: {
-      type: String,
-      default: ''
-    },
     songs: {
       type: Array,
       default: []
     },
-    name: {
-      type: String,
-      default: ''
-    }
+  },
+  created() {
+
   },
   computed: {
+     ...mapGetters([
+      //数组内设置映射，映射属性到对应的getter，返回对应的计算值
+      //相当于在Vue实例中挂载了一个叫singer的属性,实例中可使用该属性
+      'singer'
+    ]),
     bgStyle() {
-      return `background-image:url(${this.bgImage})`
+      return `background-image:url(${this.singer.avatar})`
+    },
+    name() {
+      return this.singer.name
+    },
+    fans() {
+      console.log(this.singer)
+      console.log(this.singer.fans)
+      return '粉丝: ' + this._normalizeFans(this.singer.fans)
+    },
+    desc() {
+      return this.singer.desc
+    },
+    avatar() {
+      return this.singer.avatar
+    }
+  },
+  methods: {
+    _normalizeFans(fans) {
+      try {
+        let fans_num = parseInt(fans)
+        if(fans_num < 9999 && fans_num >0) return fans_num + ' 人'
+        else if(fans_num > 9999) return parseInt(fans_num/10000) + ' 万人'
+        else return 0
+      } catch (error) {
+        return 0
+      }
     }
   }
 }
@@ -61,23 +98,52 @@ export default {
       color: $color-theme;
     }
   }
-  .name {
+  .album {
     position: absolute;
     top: 0;
-    left: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 18px;
+    margin-top: 30px;
     z-index: 40;
-    width: 80%;
-    @include ellipsis();
-    text-align: center;
-    line-height: 40px;
-    font-size: $font-size-large;
-    color: $color-text;
+    .avatar {
+      img {
+        width: 125px;
+        height: 100%;
+      }
+    }
+    .info {
+      flex: 1;
+      padding: 0 10px;
+      display: flex;
+      flex-direction: column;
+      // align-items: center;
+      justify-content: center;
+      @include ellipsis();
+      .name {
+        line-height: 40px;
+        font-size: $font-size-large;
+        color: $color-text;
+      }
+      .fans {
+        font-size: $font-size-medium;
+        margin-bottom: 8px;
+      }
+      .desc {
+        font-size: $font-size-small;
+        @include ellipsis(2);
+        line-height: 1.3em;
+      }
+    }
+    
   }
   .bg-image {
     position: relative;
     padding-top: 70%;
     transform: scale(1);
-    z-index: 0;
+    filter: blur(36px);
+    z-index: -1;
     height: 0;
     width: 100%;
     transform-origin: top; // 更改变形原点

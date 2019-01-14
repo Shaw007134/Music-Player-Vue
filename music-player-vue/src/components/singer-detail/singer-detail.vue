@@ -1,11 +1,6 @@
 <template>
   <transition name="slide">
-    <music-list :name="name" 
-                :bg-image="bgImage" 
-                :desc="desc"
-                :songs="songs"
-    >
-    
+    <music-list :songs="songs" >
     </music-list>
       
   </transition>
@@ -21,33 +16,23 @@ import MusicList from 'components/music-list/music-list'
 export default {
   data() {
       return {
-        songs: []
+        songs: [],
       }
     },
   computed: {
-    name() {
-      return this.singer.name
-    },
-    bgImage() {
-      return this.singer.avatar
-    },
-    desc() {
-      return this.singer.desc
-    },
     //通过mapGetters将数据扩展到computed计算属性中
     ...mapGetters([
       //数组内设置映射，映射属性到对应的getter，返回对应的计算值
       //相当于在Vue实例中挂载了一个叫singer的属性,实例中可使用该属性
       'singer'
-    ]),
-    
+    ]),  
   },
   created() {
     this._getDetail()
   },
   methods: {
     ...mapMutations({
-      setSinger: 'SET_SINGER'
+      updateSinger: 'UPDATE_SINGER'
     }),
     _getDetail() {
       if(!this.singer.id) {
@@ -56,11 +41,11 @@ export default {
       }
       getSingerDetail(this.singer.id).then((res) => {
         if(res.code === ERR_OK){
-          this.singer.desc = res.data.SingerDesc
-          this.singer.fans = res.data.fans
-          console.log(res)
-          console.log(this.singer)
-          this.setSinger(this.singer)
+          let objs = {
+            desc: res.data.SingerDesc,
+            fans: res.data.fans
+          }
+          this.updateSinger(objs)
           this.songs = this._normalizeSongs(res.data.list)
         }
       })
