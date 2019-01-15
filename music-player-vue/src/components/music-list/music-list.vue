@@ -18,7 +18,11 @@
         </div>
       </div>
        <div class="play-wrapper">
-        <div ref="playBtn" v-show="songs.length>0" class="play">
+        <div ref="playBtn" 
+             v-show="songs.length>0" 
+             class="play"
+             @click="random"
+        >
           <i class="icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -124,8 +128,14 @@ export default {
         index
       })
     },
+    random() {
+      this.randomPlay({
+        list: JSON.parse(JSON.stringify(this.songs))
+      })
+    },
     ...mapActions([
-      'selectPlay'
+      'selectPlay',
+      'randomPlay'
     ])
   },
   watch: {
