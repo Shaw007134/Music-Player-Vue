@@ -9,6 +9,24 @@ const mutations = {
   [types.UPDATE_SINGER](state, objs) {
     state.singer = Object.assign({},state.singer,objs)
   },
+  [types.SET_PLAYING_STATE](state, flag) {
+    state.playing = flag
+  },
+  [types.SET_FULL_SCREEN](state, flag) {
+    state.fullScreen = flag
+  },
+  [types.SET_PLAYLIST](state, list) {
+    state.playList = list
+  },
+  [types.SET_SEQUENCE_LIST](state, list) {
+    state.sequnceList = list
+  },
+  [types.SET_PLAY_MODE](state, mode) {
+    state.mode = mode
+  },
+  [types.SET_CURRENT_INDEX](state, index){
+    state.currentIndex = index
+  }
 }
 
 export default mutations
