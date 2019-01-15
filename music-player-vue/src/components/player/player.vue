@@ -92,7 +92,7 @@ import {prefixStyle} from 'commons/js/dom'
 import ProgressBar from 'base/progress-bar/progress-bar'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 import {playMode} from 'commons/js/config'
-import shuffle from 'commons/js/util'
+import {shuffle} from 'commons/js/util'
 const transform = prefixStyle('transform')
 export default {
   data() {
@@ -243,7 +243,7 @@ export default {
       this.setPlayList(list)
     },
     resetCurrentIndex(list) {
-      let index = list.findIndex(() => {
+      let index = list.findIndex((item) => {
         return item.id === this.currentSong.id
       })
       this.setCurrentIndex(index)
@@ -276,7 +276,7 @@ export default {
       setPlayingState: 'SET_PLAYING_STATE',
       setCurrentIndex: 'SET_CURRENT_INDEX',
       setPlayMode: 'SET_PLAY_MODE',
-      setPlayList: 'SET_PLAY_LIST'
+      setPlayList: 'SET_PLAYLIST'
     })
   },
   watch: {
