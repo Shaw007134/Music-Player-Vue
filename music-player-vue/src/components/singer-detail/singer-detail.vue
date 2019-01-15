@@ -60,11 +60,7 @@ export default {
             if(res.code === ERR_OK) {
               const svkey = res.data.items
               const songVkey = svkey[0].vkey
-              //工厂方法，createSong返回new Song
-              // console.log(songVkey)
-
               ret.push(createSong(musicData, songVkey))
-              // console.log(ret)
             }
           })
         }

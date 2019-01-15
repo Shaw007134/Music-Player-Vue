@@ -16,10 +16,11 @@ const mutations = {
     state.fullScreen = flag
   },
   [types.SET_PLAYLIST](state, list) {
+    console.log('playlist')
     state.playList = list
   },
   [types.SET_SEQUENCE_LIST](state, list) {
-    state.sequnceList = list
+    state.sequenceList = list
   },
   [types.SET_PLAY_MODE](state, mode) {
     state.mode = mode

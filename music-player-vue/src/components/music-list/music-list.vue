@@ -118,8 +118,9 @@ export default {
     },
     //这里不需要关系item，但子组件要尽可能把信息传递出去
     selectItem(item, index){
+      console.log(index)
       this.selectPlay({
-        list: this.songs,
+        list: JSON.parse(JSON.stringify(this.songs)),
         index
       })
     },

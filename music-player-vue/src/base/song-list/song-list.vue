@@ -31,6 +31,7 @@ export default {
       return `${song.singer}·${song.album}`
     },
     selectItem(item, index){
+      console.log('我被点了')
       this.$emit('select', item, index)
     }
     //基础组件，不写复杂业务逻辑，仅仅派发事件
