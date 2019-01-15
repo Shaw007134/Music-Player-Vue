@@ -19,6 +19,7 @@
 import {prefixStyle} from 'commons/js/dom'
 const progressBtnWidth = 16
 const transform = prefixStyle('transform')
+
 export default {
   props: {
     percent: {
@@ -27,9 +28,17 @@ export default {
     }
   },
   created() {
-    this.touch = {}
+    this.touch = {},
+    this.barWidth = 0
   },
   methods: {
+    _getbarWidth() {
+      let barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
+      if (this.barWidth < barWidth) {
+        this.barWidth = barWidth
+      }
+      return this.barWidth
+    },
     progressTouchStart(e) {
       this.touch.initiated = true
       this.touch.startX = e.touches[0].pageX
@@ -42,7 +51,7 @@ export default {
       const deltaX = e.touches[0].pageX - this.touch.startX
       const offsetWidth = 
         Math.min(Math.max(0,this.touch.left + deltaX),
-          this.$refs.progressBar.clientWidth - progressBtnWidth
+          this._getbarWidth()
         )
       this._offset(offsetWidth)
     },
@@ -55,11 +64,11 @@ export default {
       this._triggerPercent()
     },
     _offset(offsetWidth) {
-       this.$refs.progress.style.width = `${offsetWidth}px`
-        this.$refs.progressBtn.style[transform] = `translate3d(${offsetWidth}px,0,0)`
+      this.$refs.progress.style.width = `${offsetWidth}px`
+      this.$refs.progressBtn.style[transform] = `translate3d(${offsetWidth}px,0,0)`
     },
     _triggerPercent() {
-      const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
+      const barWidth = this._getbarWidth()
       const percent = this.$refs.progress.clientWidth / barWidth
       this.$emit('percentChange',percent)
     }
@@ -67,7 +76,7 @@ export default {
   watch: {
     percent(newPercent) {
       if(newPercent >= 0 && !this.touch.initiated) {
-        const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
+        const barWidth = this._getbarWidth()
         const offsetWidth =  newPercent * barWidth
         this._offset(offsetWidth)
       }
