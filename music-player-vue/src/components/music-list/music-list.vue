@@ -35,7 +35,7 @@
     >
       <!-- scroll组件需要根据数据更新高度 -->
       <div class="song-list-wrapper">
-        <song-list :songs="songs"></song-list>
+        <song-list @select="selectItem" :songs="songs"></song-list>
       </div>
       <div class="loadingContainer" v-show="!songs.length">
         <loading></loading>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import {mapGetters,mapState} from 'vuex' 
+import {mapGetters,mapActions} from 'vuex' 
 import Scroll from 'base/scroll/scroll'
 import SongList from 'base/song-list/song-list'
 import {prefixStyle} from 'commons/js/dom'
@@ -115,7 +115,17 @@ export default {
     },
     back() {
       this.$router.back()
-    }
+    },
+    //这里不需要关系item，但子组件要尽可能把信息传递出去
+    selectItem(item, index){
+      this.selectPlay({
+        list: this.songs,
+        index
+      })
+    },
+    ...mapActions([
+      'selectPlay'
+    ])
   },
   watch: {
     scrollY(newY) {
