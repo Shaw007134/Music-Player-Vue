@@ -87,6 +87,9 @@ export default {
       let anchorIndex = parseInt(this.touch.anchorIndex) + delta
       this._scrollTo(anchorIndex)
     },
+    refresh() {
+      this.$refs.listview.refresh()
+    },
     scroll(pos) {
       this.scrollY = pos.y
       //这里会调用scrollY方法，将pos.y作为参数传入
@@ -124,7 +127,6 @@ export default {
         let height2 = listHeight[i+1]
         if(-newY>height1 && -newY <height2) {
           this.currentIndex = i+1
-          console.log(this.currentIndex)
           return
         }
       }

@@ -123,6 +123,7 @@ import { playMode } from "commons/js/config";
 import { shuffle } from "commons/js/util";
 import Lyric from "lyric-parser";
 import Scroll from "base/scroll/scroll";
+
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
 export default {

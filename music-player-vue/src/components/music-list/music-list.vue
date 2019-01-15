@@ -54,10 +54,13 @@ import Scroll from 'base/scroll/scroll'
 import SongList from 'base/song-list/song-list'
 import {prefixStyle} from 'commons/js/dom'
 import Loading from 'base/loading/loading'
+import {playlistMixin} from 'commons/js/mixin'
 const RESERVED_HEIGHT = 38
 const transform = prefixStyle('transform')
 const backdrop = prefixStyle('backdrop-filter')
 export default {
+  mixins: [playlistMixin],
+  //插入mixin，同名方法覆盖，注意可能有多个mixin
   props: {
     songs: {
       type: Array,
@@ -104,15 +107,10 @@ export default {
     }
   },
   methods: {
-    _normalizeFans(fans) {
-      try {
-        let fans_num = parseInt(fans)
-        if(fans_num < 9999 && fans_num >0) return fans_num + ' 人'
-        else if(fans_num > 9999) return parseInt(fans_num/10000) + ' 万人'
-        else return 0
-      } catch (error) {
-        return 0
-      }
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.list.$el.style.bottom = bottom
+      this.$refs.list.refresh()
     },
     scroll(pos) {
       this.scrollY = pos.y
@@ -134,6 +132,16 @@ export default {
         list: this.songs.slice()
         // list: JSON.parse(JSON.stringify(this.songs))
       })
+    },
+    _normalizeFans(fans) {
+      try {
+        let fans_num = parseInt(fans)
+        if(fans_num < 9999 && fans_num >0) return fans_num + ' 人'
+        else if(fans_num > 9999) return parseInt(fans_num/10000) + ' 万人'
+        else return 0
+      } catch (error) {
+        return 0
+      }
     },
     ...mapActions([
       'selectPlay',
