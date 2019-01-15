@@ -124,13 +124,15 @@ export default {
     selectItem(item, index){
       console.log(index)
       this.selectPlay({
-        list: JSON.parse(JSON.stringify(this.songs)),
+        list: this.songs.slice(),
+        // list: JSON.parse(JSON.stringify(this.songs)),
         index
       })
     },
     random() {
       this.randomPlay({
-        list: JSON.parse(JSON.stringify(this.songs))
+        list: this.songs.slice()
+        // list: JSON.parse(JSON.stringify(this.songs))
       })
     },
     ...mapActions([

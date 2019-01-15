@@ -1,7 +1,7 @@
-import jsonp from 'commons/js/jsonp';
-import {commonParams} from 'api/config.js';
+import {commonParams, ERR_OK} from 'api/config.js';
 import axios from 'axios'
-
+import {getLyric} from 'api/lyric'
+import {Base64} from 'js-base64'
 export default class Song {
   constructor({ id, mid, singer, name, album, duration, image, url }) {
     this.id = id
@@ -13,7 +13,16 @@ export default class Song {
     this.image = image
     this.url = url
   }
+  lyric() {
+    getLyric(this.mid).then((res=>{
+      if(res.retcode == ERR_OK) {
+        this.lyric = Base64.decode(res.lyric)
+        console.log(this.lyric)
+      }
+    }))
+  }
 }
+
 
 
 export function createSong(musicData,songVkey) {

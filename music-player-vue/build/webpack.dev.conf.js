@@ -72,7 +72,11 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           params: req.query
         }).then(response => {
           var ret = response.data
+          //对返回的jsonpcallback进行处理
           if (typeof ret === 'string') {
+            // ^\w+单词多个
+            //\(\)匹配括号
+            //[^()]表示不是()的
             var reg = /^\w+\(({[^()]+})\)$/
             var matches = ret.match(reg)
             if (matches) {
