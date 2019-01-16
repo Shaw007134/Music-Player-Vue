@@ -1,15 +1,13 @@
 <template>
   <transition name="slide">
     <music-list :songs="songs" :bgStyle="bgStyle">
-      <div class="album" v-show="songs.length" ref="album">
-        <div class="avatar">
-          <img :src="avatar">
-        </div>
-        <div class="info">
-          <h1 class="name" v-html="name"></h1>
-          <div class="fans">{{fans}}</div>
-          <div class="desc" v-html="desc"></div>
-        </div>
+      <div class="avatar">
+        <img :src="avatar">
+      </div>
+      <div class="info">
+        <h1 class="name" v-html="name"></h1>
+        <div class="fans">{{fans}}</div>
+        <div class="desc" v-html="desc"></div>
       </div>
     </music-list>
       
@@ -122,16 +120,6 @@ export default {
 }
 
 .music-list {
-    .album {
-    position: absolute;
-    top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 18px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    z-index: 40;
     .avatar {
       img {
         width: 125px;
@@ -162,5 +150,5 @@ export default {
       }
     }
   }
-}
+
 </style>

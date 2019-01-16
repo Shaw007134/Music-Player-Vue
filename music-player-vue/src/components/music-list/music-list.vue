@@ -6,7 +6,9 @@
     </div>
     <!--歌手信息-->
     <div class="bg-image" :style="bgStyle" ref="bgImage">
-      <slot></slot>
+      <div class="album" v-show="songs.length" ref="album">
+        <slot></slot>
+      </div>
       <div class="play-wrapper">
         <div ref="playBtn" v-show="songs.length>0" class="play" @click="random">
           <i class="icon-play"></i>
@@ -179,6 +181,17 @@ export default {
       color: $color-theme;
     }
   }
+  .album {
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 18px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    z-index: 40;
+  }
 
   .bg-image {
     position: relative;
@@ -227,6 +240,18 @@ export default {
       background-color: rgba(7, 17, 27, 0.4);
     }
   }
+  // .bg-image::after {
+  //   content: "";
+  //   width:100%;
+  //   height:100%;
+  //   position: absolute;
+  //   left:0;
+  //   top:0;
+  //   background: inherit;
+  //   filter: blur(25px);
+  //   transform: scale(1.5);
+  //   z-index: inherit;
+  // }
   .bg-layer {
     position: relative;
     height: 100%;
