@@ -34,8 +34,11 @@ export default {
     bgStyle() {
       return `background-image:url(${this.topList.picUrl})`;
     },
+    bgImage() {
+      return this.topList.picUrl
+    },
     listennum() {
-      let num = this.topList.listencount;
+      let num = this.topList.listenCount;
       try {
         if (num.toString().length > 5) {
           return "播放量: " + ((num / 10000) | 0) + "万次";
@@ -53,17 +56,12 @@ export default {
   },
   methods: {
     _getDetail() {
-      // if (!this.topList.id) {
-      //   this.$router.push("/rank");
-      //   return;
-      // }
-      console.log(1);
-      console.log(this.topList.id);
+      if (!this.topList.id) {
+        this.$router.push("/rank");
+        return;
+      }
       getTopList_F(this.topList.id).then(res => {
-        console.log(2);
-        console.log(res);
         if (res.code === ERR_OK) {
-          console.log(res.songlist);
           this.desc = res.topinfo.info
           this.songs = this._normalizeSong(res.songlist);
         }
@@ -73,7 +71,7 @@ export default {
       let ret = [];
       list.forEach(item => {
         const musicData = item.data;
-        if (musicData.songid && musicData.albummid) {
+        if (musicData.songid && musicData.albumid) {
           getMusic(musicData.songmid).then(res => {
             if (res.code === ERR_OK) {
               const svkey = res.data.items;
@@ -93,6 +91,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "commons/style/variable.scss";
+@import "commons/style/mixin.scss";
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.3s ease;

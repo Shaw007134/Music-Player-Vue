@@ -454,8 +454,14 @@ export default {
       //   this.getLyric();
       // });
       setTimeout(() => {
-        this.$refs.audio.play();
-        this.getLyric();
+        const audio = this.$refs.audio;
+        const playPromise = audio.play();
+        if (playPromise !== null) {
+          playPromise.catch(() => {
+            audio.play();
+            this.getLyric();
+          });
+        }
       }, 1000);
       //针对微信后台切换JS不执行，可能出现的歌曲播放完songready不置为true
     },
@@ -463,8 +469,22 @@ export default {
       const audio = this.$refs.audio;
       this.$nextTick(() => {
         //在回调中执行，确保状态更新了
-        console.log(newPlaying)
-        newPlaying ? audio.play() : audio.pause();
+        if (newPlaying) {
+          const playPromise = audio.play();
+          console.log(playPromise)
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              audio.play();
+              this.getLyric();
+            },()=>{
+              this.setPlayingState(!this.playing)
+            });
+          } else {
+            window.alert("无法解析，请换一首");
+          }
+        } else {
+          audio.pause();
+        }
       });
     }
   },
