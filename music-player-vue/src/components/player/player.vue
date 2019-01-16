@@ -463,6 +463,7 @@ export default {
       const audio = this.$refs.audio;
       this.$nextTick(() => {
         //在回调中执行，确保状态更新了
+        console.log(newPlaying)
         newPlaying ? audio.play() : audio.pause();
       });
     }

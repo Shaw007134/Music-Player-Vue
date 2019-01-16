@@ -7,8 +7,12 @@
         </div>
         <div class="info">
           <h1 class="name" v-html="title"></h1>
+          <div class="creator">
+            <img :src="avatar.img" alt="">
+            <p v-html="avatar.name"></p>
+          </div>
           <div class="fans" v-html="listennum"></div>
-          <!-- <div class="desc" v-html="desc"></div> -->
+          <div class="desc" v-html="desc"></div>
         </div>
       </div>
     </music-list>
@@ -26,6 +30,8 @@ export default {
   data() {
     return {
       songs: [],
+      avatar: {},
+      desc: ''
     }
   },
   created() {
@@ -66,8 +72,12 @@ export default {
       }
       getDiscInfo(id).then((res) => {
         if(res.code === ERR_OK){
-          console.log(res.cdlist[0].songlist)
-          this.songs = this._normalizeSongs(res.cdlist[0].songlist)
+          let cd = res.cdlist[0]
+          this.desc = cd.desc
+          this.avatar.img = cd.headurl
+          this.avatar.name = cd.nickname
+          console.log(cd.songlist)
+          this.songs = this._normalizeSongs(cd.songlist)
           console.log(this.songs)
         }
       })
@@ -130,13 +140,30 @@ export default {
       justify-content: center;
       @include ellipsis();
       .name {
-        line-height: 40px;
+        line-height: 32px;
         font-size: $font-size-large;
         color: $color-text;
       }
+      .creator {
+        display: flex;
+        align-items: center;
+        padding: 5px 0;
+        img {
+          width: 25px;
+          height: 25px;
+          border-radius: 50%;
+          margin-right: 6px;
+          vertical-align: top;
+        }
+        p {
+          flex: 1;
+          font-size: $font-size-medium;
+        }
+      }
       .fans {
-        font-size: $font-size-medium;
-        margin-bottom: 8px;
+        line-height: 12px;
+        font-size: $font-size-small;
+        margin: 5px 0;
       }
       .desc {
         font-size: $font-size-small;
