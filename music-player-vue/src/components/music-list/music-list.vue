@@ -52,6 +52,10 @@ export default {
     songs: {
       type: Array,
       default: []
+    },
+    bgStyle: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -74,9 +78,9 @@ export default {
       //相当于在Vue实例中挂载了一个叫singer的属性,实例中可使用该属性
       "singer"
     ]),
-    bgStyle() {
-      return `background-image:url(${this.singer.avatar})`;
-    },
+    // bgStyle() {
+    //   return `background-image:url(${this.singer.avatar})`;
+    // },
     
   },
   methods: {

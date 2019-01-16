@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <music-list :songs="songs" >
+    <music-list :songs="songs" :bgStyle="bgStyle">
       <div class="album" v-show="songs.length" ref="album">
         <div class="avatar">
           <img :src="avatar">
@@ -49,7 +49,10 @@ export default {
     },
     avatar() {
       return this.singer.avatar;
-    }  
+    },
+    bgStyle() {
+      return `background-image:url(${this.singer.avatar})`;
+    },
   },
   created() {
     this._getDetail()

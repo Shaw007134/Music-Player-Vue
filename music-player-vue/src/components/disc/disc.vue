@@ -1,8 +1,16 @@
 <template>
   <transition name="slide">
-    <music-list :title="title"
-                :bg-image="bgImage"
-    >
+    <music-list>
+      <div class="album" ref="album">
+        <div class="avatar">
+          <img :src="bgImage">
+        </div>
+        <div class="info">
+          <h1 class="name" v-html="title"></h1>
+          <div class="fans">{{fans}}</div>
+          <div class="desc" v-html="desc"></div>
+        </div>
+      </div>
     </music-list>
   </transition>
 </template>
@@ -17,6 +25,9 @@ export default {
     },
     bgImage() {
       return this.disc.imgurl
+    },
+    bgStyle() {
+      return `background-image:url(${this.disc.imgurl})`;
     },
     ...mapGetters([
       'disc'
