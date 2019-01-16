@@ -2,7 +2,7 @@
   <div class="rank" ref="rank">
     <scroll :data="topList" class="toplist" ref="toplist">
       <ul>
-        <li class="item" v-for="item in topList" :key="item.id">
+        <li class="item" v-for="item in topList" :key="item.id" @click="selectItem(item)">
           <div class="icon">
             <img src width="100" height="100" v-lazy="item.picUrl">
           </div>
@@ -41,6 +41,11 @@ export default {
       const bottom = playlist.length ? '60px' : ''
       this.$refs.rank.style.bottom = bottom
       this.$refs.toplist.refresh()
+    },
+    selectItem() {
+      this.$router.push({
+        path: '/rank/${item.id}'
+      })
     },
     _getTopList(){
       getTopList().then((res) => {
