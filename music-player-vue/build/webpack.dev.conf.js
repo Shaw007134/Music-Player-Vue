@@ -27,12 +27,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
   // these devServer options should be customized in /config/index.js
   devServer: {
-    before(app){
+    before(app) {
       // app.use('/api', apiRoutes)
       console.log(' before app')
-      app.get('/api/music',(req,res) => {
+      app.get('/api/music', (req, res) => {
         const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
-        
+
         axios.get(url, {
           headers: {
             referer: 'https://c.y.qq.com/',
@@ -60,60 +60,31 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           console.log(error)
         })
       })
-      app.get('/api/getLyric', (req, res) => {
-        const url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
-      
+      app.get('/api/getDiscInfo', (req, res) => {
+        const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
+        console.log(url)
         axios.get(url, {
           headers: {
-            referer: 'https://c.y.qq.com',
+            referer: 'https://c.y.qq.com/',
             host: 'c.y.qq.com'
           },
           params: req.query
-        }).then(response => {
-          var ret = response.data
-          //对返回的jsonpcallback进行处理
+        }).then((response) => {
+          let ret = response.data
+          // 返回的是JSONP格式的话
           if (typeof ret === 'string') {
-            // ^\w+单词多个
-            //\(\)匹配括号
-            //[^()]表示不是()的
-            var reg = /^\w+\(({[^()]+})\)$/
-            var matches = ret.match(reg)
+            let reg = /^\w+\(({.+})\)$/
+            let matches = ret.match(reg)
             if (matches) {
               ret = JSON.parse(matches[1])
-              console.log(ret)
             }
           }
           res.json(ret)
-        }).catch(error => {
-          console.log(error)
-        })
-      })
-      
-      app.get('/api/getDiscInfo', (req, res) => {
-        const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
-        console.log(url)        
-        axios.get(url, {
-            headers: {
-                referer: 'https://c.y.qq.com/',
-                host: 'c.y.qq.com'
-            },
-            params: req.query
-        }).then((response) => {
-            var ret = response.data
-            // 返回的是JSONP格式的话
-            if (typeof ret === 'string') {
-                var reg = /^\w+\(({.+})\)$/
-                var matches = ret.match(reg)
-                if (matches) {
-                    ret = JSON.parse(matches[1])
-                }
-            }
-            res.json(ret)
-        }).catch((e)=> {
-            console.log(e)
+        }).catch((e) => {
+          console.log(e)
         })
 
-         // search
+        // search
         app.get('/api/search', (req, res) => {
           const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
 
@@ -124,7 +95,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             params: req.query
           }).then(response => {
             res.json(response.data)
-            }, err => {
+          }, err => {
             throw Error(`Proxy failed, ${err}`)
           })
         })
@@ -132,7 +103,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         app.get('/api/getRecommendItem', (req, res) => {
           const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
           const query = req.query.disstid
-  
+
           axios.get(url, {
             headers: {
               referer: `https://y.qq.com/n/yqq/playsquare/${query}.html`,
@@ -141,11 +112,11 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             params: req.query
           }).then(response => {
             let ret = response.data
-  
+
             if (typeof ret === 'string') {
               const reg = /^\w+\(({.+})\)$/
               const matches = ret.match(reg)
-  
+
               if (matches) {
                 ret = JSON.parse(matches[1])
               }
@@ -154,6 +125,34 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           }, err => {
             throw Error(`Proxy failed, ${err}`)
           })
+        })
+      })
+      app.get('/api/getLyric', (req, res) => {
+        const url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
+
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com',
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then(response => {
+          let ret = response.data
+          //对返回的jsonpcallback进行处理
+          if (typeof ret === 'string') {
+            // ^\w+单词多个
+            //\(\)匹配括号
+            //[^()]表示不是()的
+            let reg = /^\w+\(({[^()]+})\)$/
+            let matches = ret.match(reg)
+            if (matches) {
+              ret = JSON.parse(matches[1])
+              console.log(ret)
+            }
+          }
+          res.json(ret)
+        }).catch(error => {
+          console.log(error)
         })
       })
     },
@@ -179,7 +178,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     watchOptions: {
       poll: config.dev.poll,
     },
-   
+
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -222,8 +221,8 @@ module.exports = new Promise((resolve, reject) => {
           messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
         },
         onErrors: config.dev.notifyOnErrors
-        ? utils.createNotifierCallback()
-        : undefined
+          ? utils.createNotifierCallback()
+          : undefined
       }))
 
       resolve(devWebpackConfig)

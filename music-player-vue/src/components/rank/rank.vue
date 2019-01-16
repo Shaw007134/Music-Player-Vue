@@ -26,6 +26,7 @@ import {ERR_OK} from 'api/config'
 import Scroll from "base/scroll/scroll"
 import Loading from 'base/loading/loading'
 import {playlistMixin} from "commons/js/mixin"
+import {mapMutations} from 'vuex'
 export default {
   mixins: [playlistMixin],
   created() {
@@ -42,18 +43,23 @@ export default {
       this.$refs.rank.style.bottom = bottom
       this.$refs.toplist.refresh()
     },
-    selectItem() {
+    selectItem(item) {
       this.$router.push({
-        path: '/rank/${item.id}'
+        path: `/rank/${item.id}`
       })
+      this.setTopList(item)
     },
     _getTopList(){
       getTopList().then((res) => {
         if(res.code=== ERR_OK) {
           this.topList = res.data.topList
+          console.log(this.topList)
         }
       })
-    }
+    },
+    ...mapMutations({
+      setTopList: 'SET_TOP_LIST'
+    })
   },
   components: {
     Scroll,

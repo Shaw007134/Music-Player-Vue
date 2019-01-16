@@ -30,13 +30,10 @@ export const LYRIC_URL = '/api/getLyric'
 
 export const RECOMMEND_ITEM_URL = '/api/getRecommendItem'
 
-// 移动端 ranking-list url
+export const MUSIC_URL = '/api/music'
+
 export const RANKING_LIST_URL = 'https://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg'
 
-// 桌面端 ranking-list url
-// export const RANKING_LIST_URL = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_opt.fcg'
-
-// 桌面端 url（jsonp 请求），若是移动端则是 ajax 请求
 export const FULL_RANKING_LIST_URL = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg'
 
 export const HOTKEY_URL = 'https://c.y.qq.com/splcloud/fcgi-bin/gethotkey.fcg'

@@ -1,8 +1,7 @@
-import {commonParams} from 'api/config.js';
+import {commonParams,MUSIC_URL} from 'api/config.js';
 import axios from 'axios'
 
 export function getMusic(mid) {
-  const url = '/api/music'
   const data = Object.assign({},commonParams, {
     // g_tk: 1418093288,
     songmid: mid,
@@ -16,7 +15,7 @@ export function getMusic(mid) {
     cid:205361747,
     format: 'json',
   })
-  return axios.get(url, {
+  return axios.get(MUSIC_URL, {
     params: data
   }).then(res => {
     return Promise.resolve(res.data)
