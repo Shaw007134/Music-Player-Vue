@@ -18,13 +18,13 @@ export const RECOMMEND_URL = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomep
 
 export const DISC_URL = '/api/getDiscList'
 
+export const DISC_DETAIL_URL = '/api/getDiscInfo'
+
 // export const VKEY_URL = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
 
 export const SINGER_URL = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg'
 
 export const SINGER_DETAIL_URL = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg'
-
-export const SINGER_TRACK_URL = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg'
 
 export const LYRIC_URL = '/api/getLyric'
 

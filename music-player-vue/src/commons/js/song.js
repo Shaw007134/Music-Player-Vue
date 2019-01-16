@@ -1,7 +1,6 @@
-import {commonParams, ERR_OK} from 'api/config.js';
-import axios from 'axios'
 import {getLyric} from 'api/lyric'
 import {Base64} from 'js-base64'
+import {ERR_OK} from 'api/config'
 export default class Song {
   constructor({ id, mid, singer, name, album, duration, image, url }) {
     this.id = id
@@ -32,7 +31,6 @@ export default class Song {
 }
 
 
-
 export function createSong(musicData,songVkey) {
   return new Song({
     id: musicData.songid,
@@ -49,29 +47,6 @@ export function createSong(musicData,songVkey) {
 
     // url: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}/${musicData.songid}.m4a?guid=263427534&fromtag
   })
-}
-
-export function getMusic(mid) {
-  const url = '/api/music'
-  const data = Object.assign({},commonParams, {
-    // g_tk: 1418093288,
-    songmid: mid,
-    filename: `C400${mid}.m4a`,
-    guid: 6442406400,
-    platform: 'yqq',
-    loginUin: 0,
-    hostUin: 0,
-    needNewCode: 0,
-    uin: 0,
-    cid:205361747,
-    format: 'json',
-  })
-  return axios.get(url, {
-    params: data
-  }).then(res => {
-    return Promise.resolve(res.data)
-  })
-
 }
 
 function filterSinger(singer) {

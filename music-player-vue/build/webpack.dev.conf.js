@@ -48,7 +48,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       app.get('/api/getDiscList', (req, res) => {
         console.log('getDiscList')
         const url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
-      
         axios.get(url, {
           headers: {
             referer: 'https://c.y.qq.com',
@@ -81,6 +80,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             var matches = ret.match(reg)
             if (matches) {
               ret = JSON.parse(matches[1])
+              console.log(ret)
             }
           }
           res.json(ret)
@@ -89,8 +89,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         })
       })
       
-      app.get('/api/getSongList', (req, res) => {
+      app.get('/api/getDiscInfo', (req, res) => {
         const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
+        console.log(url)        
         axios.get(url, {
             headers: {
                 referer: 'https://c.y.qq.com/',

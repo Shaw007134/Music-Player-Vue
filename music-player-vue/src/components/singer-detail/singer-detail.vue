@@ -19,7 +19,8 @@
 <script>
 import {mapGetters,mapMutations} from 'vuex' 
 import {getSingerDetail} from 'api/singer'
-import {createSong,getMusic} from 'commons/js/song'
+import {createSong} from 'commons/js/song'
+import {getMusic} from 'api/song'
 import {ERR_OK} from 'api/config'
 import MusicList from 'components/music-list/music-list'
 
