@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       songs: [],
-      desc: ''
+      desc: ""
     };
   },
   computed: {
@@ -32,10 +32,12 @@ export default {
       return this.topList.topTitle;
     },
     bgStyle() {
-      return `background-image:url(${this.topList.picUrl})`;
+      if (this.songs.length) {
+        return `background-image:url(${this.songs[0].image})`;
+      }
     },
     bgImage() {
-      return this.topList.picUrl
+      return this.topList.picUrl;
     },
     listennum() {
       let num = this.topList.listenCount;
@@ -62,13 +64,16 @@ export default {
       }
       getTopList_F(this.topList.id).then(res => {
         if (res.code === ERR_OK) {
-          this.desc = res.topinfo.info
-          this.songs = this._normalizeSong(res.songlist);
+          this.desc = res.topinfo.info;
+          setTimeout(() => {
+            this.songs = this._normalizeSong(res.songlist);
+          }, 300);
         }
       });
     },
     _normalizeSong(list) {
       let ret = [];
+      console.log(list)
       list.forEach(item => {
         const musicData = item.data;
         if (musicData.songid && musicData.albumid) {
