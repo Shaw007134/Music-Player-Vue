@@ -25,8 +25,11 @@ const mutations = {
   [types.SET_PLAY_MODE](state, mode) {
     state.mode = mode
   },
-  [types.SET_CURRENT_INDEX](state, index){
+  [types.SET_CURRENT_INDEX](state, index) {
     state.currentIndex = index
+  },
+  [types.SET_DISC](state, disc) {
+    state.disc = disc
   }
 }
 

@@ -5,24 +5,10 @@
       <i class="icon-back"></i>
     </div>
     <!--歌手信息-->
-    
     <div class="bg-image" :style="bgStyle" ref="bgImage">
-      <div class="album" v-show="songs.length" ref="album">
-        <div class="avatar">
-          <img :src=avatar>
-        </div>
-        <div class="info">
-          <h1 class="name" v-html="name"></h1>
-          <div class="fans" >{{fans}}</div>
-          <div class="desc" v-html="desc"></div>
-        </div>
-      </div>
-       <div class="play-wrapper">
-        <div ref="playBtn" 
-             v-show="songs.length>0" 
-             class="play"
-             @click="random"
-        >
+      <slot></slot>
+      <div class="play-wrapper">
+        <div ref="playBtn" v-show="songs.length>0" class="play" @click="random">
           <i class="icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -30,12 +16,13 @@
       <div class="filter" ref="filter"></div>
     </div>
     <div class="bg-layer" ref="layer"></div>
-    <scroll :data="songs" 
-            class="list" 
-            ref="list"
-            :probe-type="probeType"
-            :listen-scroll="listenScroll"
-            @scroll="scroll"
+    <scroll
+      :data="songs"
+      class="list"
+      ref="list"
+      :probe-type="probeType"
+      :listen-scroll="listenScroll"
+      @scroll="scroll"
     >
       <!-- scroll组件需要根据数据更新高度 -->
       <div class="song-list-wrapper">
@@ -49,15 +36,15 @@
 </template>
 
 <script>
-import {mapGetters,mapActions} from 'vuex' 
-import Scroll from 'base/scroll/scroll'
-import SongList from 'base/song-list/song-list'
-import {prefixStyle} from 'commons/js/dom'
-import Loading from 'base/loading/loading'
-import {playlistMixin} from 'commons/js/mixin'
-const RESERVED_HEIGHT = 38
-const transform = prefixStyle('transform')
-const backdrop = prefixStyle('backdrop-filter')
+import { mapGetters, mapActions } from "vuex";
+import Scroll from "base/scroll/scroll";
+import SongList from "base/song-list/song-list";
+import { prefixStyle } from "commons/js/dom";
+import Loading from "base/loading/loading";
+import { playlistMixin } from "commons/js/mixin";
+const RESERVED_HEIGHT = 38;
+const transform = prefixStyle("transform");
+const backdrop = prefixStyle("backdrop-filter");
 export default {
   mixins: [playlistMixin],
   //插入mixin，同名方法覆盖，注意可能有多个mixin
@@ -65,122 +52,95 @@ export default {
     songs: {
       type: Array,
       default: []
-    },
+    }
   },
   data() {
     return {
       scrollY: 0
-    }
+    };
   },
   created() {
-    this.probeType = 3
-    this.listenScroll = true
+    this.probeType = 3;
+    this.listenScroll = true;
   },
   mounted() {
-    this.imageHeight = this.$refs.bgImage.clientHeight
-    this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT
-    this.$refs.list.$el.style.top = 
-      `${this.imageHeight}px` 
+    this.imageHeight = this.$refs.bgImage.clientHeight;
+    this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT;
+    this.$refs.list.$el.style.top = `${this.imageHeight}px`;
   },
   computed: {
-     ...mapGetters([
+    ...mapGetters([
       //数组内设置映射，映射属性到对应的getter，返回对应的计算值
       //相当于在Vue实例中挂载了一个叫singer的属性,实例中可使用该属性
-      'singer'
+      "singer"
     ]),
     bgStyle() {
-      return `background-image:url(${this.singer.avatar})`
+      return `background-image:url(${this.singer.avatar})`;
     },
-    name() {
-      return this.singer.name
-    },
-    fans() {
-      console.log(this.singer)
-      console.log(this.singer.fans)
-      return '粉丝: ' + this._normalizeFans(this.singer.fans)
-    },
-    desc() {
-      return this.singer.desc
-    },
-    avatar() {
-      return this.singer.avatar
-    }
+    
   },
   methods: {
     handlePlaylist(playlist) {
-      const bottom = playlist.length > 0 ? '60px' : ''
-      this.$refs.list.$el.style.bottom = bottom
-      this.$refs.list.refresh()
+      const bottom = playlist.length > 0 ? "60px" : "";
+      this.$refs.list.$el.style.bottom = bottom;
+      this.$refs.list.refresh();
     },
     scroll(pos) {
-      this.scrollY = pos.y
+      this.scrollY = pos.y;
     },
     back() {
-      this.$router.back()
+      this.$router.back();
     },
     //这里不需要关系item，但子组件要尽可能把信息传递出去
-    selectItem(item, index){
-      console.log(index)
+    selectItem(item, index) {
+      console.log(index);
       this.selectPlay({
         list: this.songs.slice(),
         // list: JSON.parse(JSON.stringify(this.songs)),
         index
-      })
+      });
     },
     random() {
       this.randomPlay({
         list: this.songs.slice()
         // list: JSON.parse(JSON.stringify(this.songs))
-      })
+      });
     },
-    _normalizeFans(fans) {
-      try {
-        let fans_num = parseInt(fans)
-        if(fans_num < 9999 && fans_num >0) return fans_num + ' 人'
-        else if(fans_num > 9999) return parseInt(fans_num/10000) + ' 万人'
-        else return 0
-      } catch (error) {
-        return 0
-      }
-    },
-    ...mapActions([
-      'selectPlay',
-      'randomPlay'
-    ])
+    ...mapActions(["selectPlay", "randomPlay"])
   },
   watch: {
     scrollY(newY) {
-      let zIndex = 0
-      let scale = 1
-      let blur = 0
-      let translateY = Math.max(this.minTranslateY,newY)
-      this.$refs.layer.style[transform] = `translate3d(0,${translateY}px,0)`
-      const percent = Math.abs(newY / this.imageHeight)
-      
-      if(newY > 0){
-        scale = 1 + percent
-        zIndex = 10
-      }else{
-        blur = Math.min(20 * percent, 20)
+      let zIndex = 0;
+      let scale = 1;
+      let blur = 0;
+      let translateY = Math.max(this.minTranslateY, newY);
+      this.$refs.layer.style[transform] = `translate3d(0,${translateY}px,0)`;
+      const percent = Math.abs(newY / this.imageHeight);
+
+      if (newY > 0) {
+        scale = 1 + percent;
+        zIndex = 10;
+      } else {
+        blur = Math.min(20 * percent, 20);
       }
-      this.$refs.filter.style[backdrop] = `blur(${blur}px)`
-      if(newY < this.minTranslateY) {
-        zIndex = 10
-        this.$refs.bgImage.style.paddingTop = 0
-        this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
-        this.$refs.playBtn.style.display = 'none'
-        this.$refs.album.style.display = 'none'
-      }else {
-        this.$refs.bgImage.style.paddingTop = '62%'
-        this.$refs.bgImage.style.height = 0
-        this.$refs.playBtn.style.display = ''
-        this.$refs.album.style.display = ''
+      this.$refs.filter.style[backdrop] = `blur(${blur}px)`;
+      if (newY < this.minTranslateY) {
+        zIndex = 10;
+        this.$refs.bgImage.style.paddingTop = 0;
+        this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`;
+        this.$refs.playBtn.style.display = "none";
+        this.$refs.album.style.display = "none";
+      } else {
+        this.$refs.bgImage.style.paddingTop = "62%";
+        this.$refs.bgImage.style.height = 0;
+        this.$refs.playBtn.style.display = "";
+        this.$refs.album.style.display = "";
         // if(this.$refs.album.style.zIndex != 10){
         //   this.$refs.album.style.zIndex = 10
         // } 10
       }
-      this.$refs.bgImage.style[transform] = `scale(${scale})`
-      this.$refs.bgImage.style.zIndex = zIndex
+      this.$refs.bgImage.style[transform] = `scale(${scale})`;
+      this.$refs.bgImage.style.zIndex = zIndex;
     }
   },
   components: {
@@ -188,12 +148,12 @@ export default {
     SongList,
     Loading
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import 'commons/style/variable.scss';
-@import 'commons/style/mixin.scss';
+@import "commons/style/variable.scss";
+@import "commons/style/mixin.scss";
 
 .music-list {
   position: fixed;
@@ -215,47 +175,7 @@ export default {
       color: $color-theme;
     }
   }
-  .album {
-    position: absolute;
-    top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 18px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    z-index: 40;
-    .avatar {
-      img {
-        width: 125px;
-        height: 100%;
-      }
-    }
-    .info {
-      flex: 1;
-      padding: 0 10px;
-      display: flex;
-      flex-direction: column;
-      // align-items: center;
-      justify-content: center;
-      @include ellipsis();
-      .name {
-        line-height: 40px;
-        font-size: $font-size-large;
-        color: $color-text;
-      }
-      .fans {
-        font-size: $font-size-medium;
-        margin-bottom: 8px;
-      }
-      .desc {
-        font-size: $font-size-small;
-        @include ellipsis(2);
-        line-height: 1.3em;
-      }
-    }
-    
-  }
+
   .bg-image {
     position: relative;
     padding-top: 62%;
@@ -280,7 +200,8 @@ export default {
         border: 1px solid $color-theme;
         color: $color-theme;
         border-radius: 100px;
-        .icon-play, .text {
+        .icon-play,
+        .text {
           display: inline-block;
           vertical-align: middle;
         }

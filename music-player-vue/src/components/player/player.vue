@@ -249,7 +249,7 @@ export default {
     },
     next() {
       if (!this.songReady) return;
-      if (this.playlist.length === 1) {
+      if (this.playList.length === 1) {
         this.loop();
       } else {
         let index = this.currentIndex + 1;
@@ -265,7 +265,7 @@ export default {
     },
     prev() {
       if (!this.songReady) return;
-       if (this.playlist.length === 1) {
+      if (this.playList.length === 1) {
         this.loop();
       } else {
         let index = this.currentIndex - 1;
@@ -275,7 +275,7 @@ export default {
         this.setCurrentIndex(index);
         if (!this.playing) {
           this.togglePlaying();
-        }      
+        }
       }
 
       this.songReady = false;
@@ -456,7 +456,7 @@ export default {
       setTimeout(() => {
         this.$refs.audio.play();
         this.getLyric();
-      },1000)
+      }, 1000);
       //针对微信后台切换JS不执行，可能出现的歌曲播放完songready不置为true
     },
     playing(newPlaying) {

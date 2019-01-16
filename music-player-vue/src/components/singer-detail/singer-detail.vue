@@ -1,6 +1,16 @@
 <template>
   <transition name="slide">
     <music-list :songs="songs" >
+      <div class="album" v-show="songs.length" ref="album">
+        <div class="avatar">
+          <img :src="avatar">
+        </div>
+        <div class="info">
+          <h1 class="name" v-html="name"></h1>
+          <div class="fans">{{fans}}</div>
+          <div class="desc" v-html="desc"></div>
+        </div>
+      </div>
     </music-list>
       
   </transition>
@@ -25,7 +35,21 @@ export default {
       //数组内设置映射，映射属性到对应的getter，返回对应的计算值
       //相当于在Vue实例中挂载了一个叫singer的属性,实例中可使用该属性
       'singer'
-    ]),  
+    ]),
+    name() {
+      return this.singer.name;
+    },
+    fans() {
+      console.log(this.singer);
+      console.log(this.singer.fans);
+      return "粉丝: " + this._normalizeFans(this.singer.fans);
+    },
+    desc() {
+      return this.singer.desc;
+    },
+    avatar() {
+      return this.singer.avatar;
+    }  
   },
   created() {
     this._getDetail()
@@ -66,7 +90,17 @@ export default {
         }
       })
       return ret
-    }
+    },
+    _normalizeFans(fans) {
+      try {
+        let fans_num = parseInt(fans);
+        if (fans_num < 9999 && fans_num > 0) return fans_num + " 人";
+        else if (fans_num > 9999) return parseInt(fans_num / 10000) + " 万人";
+        else return 0;
+      } catch (error) {
+        return 0;
+      }
+    },
   },
   components: {
     MusicList
@@ -76,6 +110,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "commons/style/variable.scss";
+@import "commons/style/mixin.scss";
 
 
 .slide-enter-active, .slide-leave-active{
@@ -85,4 +120,46 @@ export default {
   transform: translate3d(100%, 0, 0)
 }
 
+.music-list {
+    .album {
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 18px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    z-index: 40;
+    .avatar {
+      img {
+        width: 125px;
+        height: 100%;
+      }
+    }
+    .info {
+      flex: 1;
+      padding: 0 10px;
+      display: flex;
+      flex-direction: column;
+      // align-items: center;
+      justify-content: center;
+      @include ellipsis();
+      .name {
+        line-height: 40px;
+        font-size: $font-size-large;
+        color: $color-text;
+      }
+      .fans {
+        font-size: $font-size-medium;
+        margin-bottom: 8px;
+      }
+      .desc {
+        font-size: $font-size-small;
+        @include ellipsis(2);
+        line-height: 1.3em;
+      }
+    }
+  }
+}
 </style>
