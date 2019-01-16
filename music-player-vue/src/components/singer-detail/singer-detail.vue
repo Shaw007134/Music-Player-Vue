@@ -40,9 +40,16 @@ export default {
       return this.singer.name;
     },
     fans() {
-      console.log(this.singer);
-      console.log(this.singer.fans);
-      return "粉丝: " + this._normalizeFans(this.singer.fans);
+      let num = this.singer.fans;
+      try {
+        if (num.toString().length > 5) {
+          return "粉丝: " + (num / 10000 | 0) + "万人"
+        }else {
+          return "粉丝: " + num + "人"
+        }
+      } catch (error) {
+          return "粉丝: " + 0 + "人"
+      }
     },
     desc() {
       return this.singer.desc;
@@ -93,16 +100,6 @@ export default {
         }
       })
       return ret
-    },
-    _normalizeFans(fans) {
-      try {
-        let fans_num = parseInt(fans);
-        if (fans_num < 9999 && fans_num > 0) return fans_num + " 人";
-        else if (fans_num > 9999) return parseInt(fans_num / 10000) + " 万人";
-        else return 0;
-      } catch (error) {
-        return 0;
-      }
     },
   },
   components: {
