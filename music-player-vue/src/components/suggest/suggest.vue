@@ -1,5 +1,5 @@
 <template>
-  <div class="suggest">
+  <scroll class="suggest" :data="songs">
     <ul class="suggest-list">
       <li class="suggest-item" v-show="singer" v-for="item in singer" :key="item.id">
         <div class="icon">
@@ -18,7 +18,7 @@
         </div>
       </li>
     </ul>
-  </div>
+  </scroll>
 </template>
 
 <script>
@@ -26,7 +26,7 @@ import { search } from "api/search";
 import { ERR_OK } from "api/config";
 import { createSong } from "commons/js/song";
 import { getMusic } from "api/song";
-
+import Scroll from 'base/scroll/scroll'
 const TYPE_SINGER = "singer";
 export default {
   props: {
@@ -99,6 +99,9 @@ export default {
     query() {
       this.search();
     }
+  },
+  components: {
+    Scroll
   }
 };
 </script>
