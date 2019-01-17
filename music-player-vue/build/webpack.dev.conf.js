@@ -82,49 +82,49 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           res.json(ret)
         }).catch((e) => {
           console.log(e)
+        })        
+      })
+      // search
+      app.get('/api/search', (req, res) => {
+        const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
+        console.log('search')
+        axios.get(url, {
+          headers: {
+            referer: 'https://m.y.qq.com/'
+          },
+          params: req.query
+        }).then(response => {
+          console.log(response.data)
+          res.json(response.data)
+        }, err => {
+          throw Error(`Proxy failed, ${err}`)
         })
+      })
 
-        // search
-        app.get('/api/search', (req, res) => {
-          const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
+      app.get('/api/getRecommendItem', (req, res) => {
+        const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
+        const query = req.query.disstid
 
-          axios.get(url, {
-            headers: {
-              referer: 'https://m.y.qq.com/'
-            },
-            params: req.query
-          }).then(response => {
-            res.json(response.data)
-          }, err => {
-            throw Error(`Proxy failed, ${err}`)
-          })
-        })
+        axios.get(url, {
+          headers: {
+            referer: `https://y.qq.com/n/yqq/playsquare/${query}.html`,
+            host: 'c.y.qq.com'
+          },
+          params: req.query
+        }).then(response => {
+          let ret = response.data
 
-        app.get('/api/getRecommendItem', (req, res) => {
-          const url = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg'
-          const query = req.query.disstid
+          if (typeof ret === 'string') {
+            const reg = /^\w+\(({.+})\)$/
+            const matches = ret.match(reg)
 
-          axios.get(url, {
-            headers: {
-              referer: `https://y.qq.com/n/yqq/playsquare/${query}.html`,
-              host: 'c.y.qq.com'
-            },
-            params: req.query
-          }).then(response => {
-            let ret = response.data
-
-            if (typeof ret === 'string') {
-              const reg = /^\w+\(({.+})\)$/
-              const matches = ret.match(reg)
-
-              if (matches) {
-                ret = JSON.parse(matches[1])
-              }
+            if (matches) {
+              ret = JSON.parse(matches[1])
             }
-            res.json(ret)
-          }, err => {
-            throw Error(`Proxy failed, ${err}`)
-          })
+          }
+          res.json(ret)
+        }, err => {
+          throw Error(`Proxy failed, ${err}`)
         })
       })
       app.get('/api/getLyric', (req, res) => {
