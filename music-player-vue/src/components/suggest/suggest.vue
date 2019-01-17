@@ -1,7 +1,15 @@
 <template>
   <div class="suggest">
     <ul class="suggest-list">
-      <li class="suggest-item" v-for="item in result" :key="item.id">
+      <li class="suggest-item" v-show="singer" v-for="item in singer" :key="item.id">
+        <div class="icon">
+          <i :class="getIconCls(item)"></i>
+        </div>
+        <div class="name">
+          <p class="text" v-html="getDisplayName(item)"></p>
+        </div>
+      </li>
+      <li class="suggest-item" v-show="songs" v-for="item in songs" :key="item.id">
         <div class="icon">
           <i :class="getIconCls(item)"></i>
         </div>
@@ -16,7 +24,9 @@
 <script>
 import { search } from "api/search";
 import { ERR_OK } from "api/config";
-import {filterSinger} from 'commons/js/song'
+import { createSong } from "commons/js/song";
+import { getMusic } from "api/song";
+
 const TYPE_SINGER = "singer";
 export default {
   props: {
@@ -32,15 +42,19 @@ export default {
   data() {
     return {
       page: 1,
-      result: []
+      singer: [],
+      songs: []
     };
   },
+  computed: {},
   methods: {
     search() {
       search(this.query, this.page, this.showSinger, 20).then(res => {
         if (res.code === ERR_OK) {
           console.log(res.data);
-          this.result = this._getResult(res.data);
+          this.singer = this._getResult(res.data);
+          this.songs = this._normalizeSongs(res.data.song.list)
+          console.log(this.songs)
         }
       });
     },
@@ -55,7 +69,7 @@ export default {
       if (item.type === TYPE_SINGER) {
         return item.singername;
       } else {
-        return `${item.songname}-${filterSinger(item.singer)}`;
+        return `${item.name} - ${item.singer}`;
       }
     },
     _getResult(data) {
@@ -63,9 +77,21 @@ export default {
       if (data.zhida && data.zhida.singerid) {
         ret.push({ ...data.zhida, ...{ type: TYPE_SINGER } });
       }
-      if (data.song) {
-        ret = ret.concat(data.song.list);
-      }
+      return ret;
+    },
+    _normalizeSongs(list) {
+      let ret = [];
+      list.forEach(musicData => {
+        if (musicData.songid && musicData.albumid) {
+          getMusic(musicData.songmid).then(res => {
+            if (res.code === ERR_OK) {
+              const svkey = res.data.items;
+              const songVkey = svkey[0].vkey;
+              ret.push(createSong(musicData, songVkey));
+            }
+          })
+        }
+      })
       return ret;
     }
   },

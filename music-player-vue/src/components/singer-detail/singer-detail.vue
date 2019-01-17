@@ -88,7 +88,7 @@ export default {
       list.forEach((item) => {
         let {musicData} = item
         //判断
-        if(musicData.songid && musicData.albummid) {
+        if(musicData.songid && musicData.albumid) {
           getMusic(musicData.songmid).then((res)=>{
             if(res.code === ERR_OK) {
               const svkey = res.data.items
