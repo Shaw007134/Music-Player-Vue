@@ -1,6 +1,5 @@
 import jsonp from 'commons/js/jsonp'
 import { commonParams, RANKING_LIST_URL, options, FULL_RANKING_LIST_URL } from './config'
-import axios from 'axios'
 
 export function getTopList() {
   const data = Object.assign({}, commonParams, {
