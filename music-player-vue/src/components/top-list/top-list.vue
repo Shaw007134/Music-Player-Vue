@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <music-list :bgStyle="bgStyle" :songs="songs">
+    <music-list :rank="rank" :bgStyle="bgStyle" :songs="songs">
       <div class="avatar">
         <img :src="bgImage">
       </div>
@@ -24,7 +24,8 @@ export default {
   data() {
     return {
       songs: [],
-      desc: ""
+      desc: "",
+      rank: true
     };
   },
   computed: {
@@ -67,13 +68,12 @@ export default {
           this.desc = res.topinfo.info;
           setTimeout(() => {
             this.songs = this._normalizeSong(res.songlist);
-          }, 300);
+          }, 200);
         }
       });
     },
     _normalizeSong(list) {
       let ret = [];
-      console.log(list)
       list.forEach(item => {
         const musicData = item.data;
         if (musicData.songid && musicData.albumid) {

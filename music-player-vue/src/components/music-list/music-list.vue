@@ -28,7 +28,7 @@
     >
       <!-- scroll组件需要根据数据更新高度 -->
       <div class="song-list-wrapper">
-        <song-list @select="selectItem" :songs="songs"></song-list>
+        <song-list :rank="rank" @select="selectItem" :songs="songs"></song-list>
       </div>
       <div class="loadingContainer" v-show="!songs.length">
         <loading></loading>
@@ -58,6 +58,10 @@ export default {
     bgStyle: {
       type: String,
       default: ''
+    },
+    rank: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
