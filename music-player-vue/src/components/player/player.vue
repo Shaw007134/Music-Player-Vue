@@ -457,6 +457,7 @@ export default {
       if (newSong.id === oldSong.id) {
         return;
       }
+      console.log(this.currentLyric)
       this.clearLyric(this.currentLyric);
       getMusic(newSong.mid).then(res => {
         const newVkey = res.data.items[0].vkey;
