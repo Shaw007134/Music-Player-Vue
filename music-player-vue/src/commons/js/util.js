@@ -14,3 +14,15 @@ export function shuffle(arr) {
   return _arr
 }
 
+//对函数进行节流，返回新的函数，这个新函数会延迟执行要节流的函数
+export function debounce(func, delay) {
+  let timer
+  return function (...args) {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      func.apply(this, args)
+    },delay)
+  }
+}
