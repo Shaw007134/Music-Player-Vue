@@ -157,12 +157,8 @@ export default {
     },
     ...mapGetters([
       "fullScreen",
-      "playList",
-      "currentSong",
       "playing",
       "currentIndex",
-      "mode",
-      "sequenceList"
     ])
   },
   created() {
@@ -429,10 +425,6 @@ export default {
     },
     ...mapMutations({
       setFullScreen: "SET_FULL_SCREEN",
-      setPlayingState: "SET_PLAYING_STATE",
-      setCurrentIndex: "SET_CURRENT_INDEX",
-      setPlayMode: "SET_PLAY_MODE",
-      setPlayList: "SET_PLAYLIST"
     })
   },
   watch: {
