@@ -6,7 +6,7 @@
         <div class="list-header">
           <h1 class="title">
             <i class="icon" :class="iconMode" @click="changeMode"></i>
-            <span class="text"></span>
+            <span class="text">{{modeText}}</span>
             <span class="clear" @click="showConfirm">
               <i class="icon-clear"></i>
             </span>
@@ -14,7 +14,13 @@
         </div>
         <scroll class="list-content" ref="listContent" :data="sequenceList">
           <transition-group name="list" tag="ul">
-            <li ref="listItem" @click="selectItem(item,index)" class="item" v-for="(item,index) in sequenceList" :key="item.id">
+            <li
+              ref="listItem"
+              @click="selectItem(item,index)"
+              class="item"
+              v-for="(item,index) in sequenceList"
+              :key="item.id"
+            >
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{item.name}}</span>
               <span class="like">
@@ -56,7 +62,12 @@ export default {
       showFlag: false,
     }
   },
-
+  computed: {
+    modeText() {
+      return this.mode === playMode.sequence ? '顺序播放' : 
+        this.mode === playMode.random ? '随机播放' : '单曲循环'
+    }
+  },
   methods: {
     show() {
       this.showFlag = true
