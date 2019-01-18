@@ -54,6 +54,7 @@ export default {
     };
   },
   computed: {
+    //对于异步操作，可以将其作为计算属性，确保其实时更新
     shortcut() {
       return this.hotKey.concat(this.searchHistory)
     },
@@ -91,6 +92,7 @@ export default {
     ])
   },
   watch: {
+    //无法及时更新时，可进行watch，强制刷新
     query(newQuery) {
       if(!newQuery) {
         setTimeout(()=>{
