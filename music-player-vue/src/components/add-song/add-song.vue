@@ -8,11 +8,11 @@
         </div>
       </div>
       <div class="search-box-wrapper">
-        <search-box @query="onQueryChange" placeholder="搜索歌曲"></search-box>
+        <search-box @query="onQueryChange" placeholder="搜索歌曲" ref="searchBox"></search-box>
       </div>
       <div class="shortcut" v-show="!query"></div>
       <div class="search-result" v-show="query">
-        <suggest :query="query" :showSinger="showSinger" @select="selectSuggest"></suggest>
+        <suggest :query="query" :showSinger="showSinger" @listScroll="blurInput" @select="saveSearch"></suggest>
       </div>
     </div>
   </transition>
@@ -38,9 +38,6 @@ export default {
       this.showFlag = false;
     },
 
-    selectSuggest() {
-
-    }
   },
   components: {
     SearchBox,
