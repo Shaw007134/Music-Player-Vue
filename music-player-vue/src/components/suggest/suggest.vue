@@ -28,7 +28,6 @@ import { search } from "api/search";
 import { ERR_OK } from "api/config";
 import { createSong } from "commons/js/song";
 import Scroll from "base/scroll/scroll";
-import { playlistMixin } from "commons/js/mixin";
 import Loading from 'base/loading/loading'
 import Singer from 'commons/js/singer'
 import { mapMutations,mapActions } from 'vuex';
@@ -36,7 +35,6 @@ import NoResult from 'base/no-result/no-result'
 const TYPE_SINGER = "singer";
 const perpage = 20;
 export default {
-  mixins: [playlistMixin],
   props: {
     query: {
       type: String,
@@ -58,13 +56,6 @@ export default {
   },
   computed: {},
   methods: {
-    handlePlaylist(playlist) {
-      console.log(playlist.length)
-      //这里更改好像无效？
-      const bottom = playlist.length > 0 ? "120px" : "";
-      this.$refs.suggest.$el.style.bottom = bottom;
-      this.$refs.suggest.refresh();
-    },
     search() {
       this.hasMore = true;
       this.page = 1
@@ -122,6 +113,9 @@ export default {
     },
     listScroll() {
       this.$emit('listScroll')
+    },
+    refresh() {
+      this.$refs.suggest.refresh()
     },
     _checkMore(data) {
       const song = data.song;
