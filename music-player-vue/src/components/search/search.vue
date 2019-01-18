@@ -20,6 +20,7 @@
               <i class="icon-clear"></i>
             </span>
           </h1>
+          <search-list :searches="searchHistory"></search-list>
         </div>
       </div>
     </div>
@@ -36,6 +37,7 @@ import {getHotKey} from 'api/search'
 import {ERR_OK} from 'api/config'
 import Suggest from 'components/suggest/suggest'
 import {mapActions, mapGetters} from 'vuex'
+import SearchList from 'base/search-list/search-list'
 export default {
   created() {
     this._getHotKey()
@@ -79,7 +81,8 @@ export default {
   },
   components: {
     SearchBox,
-    Suggest
+    Suggest,
+    SearchList
   }
 }
 </script>
@@ -104,6 +107,7 @@ export default {
         margin: 10px 20px 20px 20px;
         .title {
           margin-bottom: 20px;
+          padding: 2px 0;
           font-size: $font-size-medium;
           color: $color-text-l;
         }

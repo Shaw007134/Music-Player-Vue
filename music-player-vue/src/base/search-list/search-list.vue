@@ -26,30 +26,34 @@ export default {
 @import "commons/style/variable.scss";
 @import "commons/style/mixin.scss";
 
-.search-item {
-  display: flex;
-  align-items: center;
-  height: 40px;
-  overflow: hidden;
-  color: $color-text-l;
-  &.slide-enter,
-  &.slide-leave-to {
-    height: 0;
-  }
-  &.slide-enter-active,
-  &.slide-leave-active {
-    transition: all 0.1s;
-  }
-  .text {
-    flex: 1;
-    font-size: $font-size-medium-x;
-    @include ellipsis();
-  }
-  .icon {
-    @include extend-click();
-    .icon-close {
-      font-size: $font-size-small;
+.search-list {
+  .search-item {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    overflow: hidden;
+    color: $color-text-l;
+    &.slide-enter,
+    &.slide-leave-to {
+      height: 0;
+    }
+    &.slide-enter-active,
+    &.slide-leave-active {
+      transition: all 0.1s;
+    }
+    .text {
+      flex: 1;
+      padding: 2px 0;
+      font-size: $font-size-medium;
+      @include ellipsis();
       color: $color-text-d;
+    }
+    .icon {
+      @include extend-click();
+      .icon-delete {
+        font-size: $font-size-small;
+        color: $color-text-d;
+      }
     }
   }
 }
