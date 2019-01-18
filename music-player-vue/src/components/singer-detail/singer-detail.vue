@@ -18,7 +18,6 @@
 import {mapGetters,mapMutations} from 'vuex' 
 import {getSingerDetail} from 'api/singer'
 import {createSong} from 'commons/js/song'
-import {getMusic} from 'api/song'
 import {ERR_OK} from 'api/config'
 import MusicList from 'components/music-list/music-list'
 
@@ -89,13 +88,7 @@ export default {
         let {musicData} = item
         //判断
         if(musicData.songid && musicData.albumid) {
-          getMusic(musicData.songmid).then((res)=>{
-            if(res.code === ERR_OK) {
-              const svkey = res.data.items
-              const songVkey = svkey[0].vkey
-              ret.push(createSong(musicData, songVkey))
-            }
-          })
+          ret.push(createSong(musicData))
         }
       })
       return ret

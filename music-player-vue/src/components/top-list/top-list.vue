@@ -18,7 +18,6 @@ import MusicList from "components/music-list/music-list";
 import { mapGetters } from "vuex";
 import { getTopList_F } from "api/rank";
 import { ERR_OK } from "api/config";
-import { getMusic } from "api/song";
 import { createSong } from "commons/js/song";
 export default {
   data() {
@@ -66,9 +65,7 @@ export default {
       getTopList_F(this.topList.id).then(res => {
         if (res.code === ERR_OK) {
           this.desc = res.topinfo.info;
-          setTimeout(() => {
-            this.songs = this._normalizeSong(res.songlist);
-          }, 200);
+          this.songs = this._normalizeSong(res.songlist);
         }
       });
     },
@@ -77,13 +74,7 @@ export default {
       list.forEach(item => {
         const musicData = item.data;
         if (musicData.songid && musicData.albumid) {
-          getMusic(musicData.songmid).then(res => {
-            if (res.code === ERR_OK) {
-              const svkey = res.data.items;
-              const songVkey = svkey[0].vkey;
-              ret.push(createSong(musicData, songVkey));
-            }
-          });
+              ret.push(createSong(musicData));
         }
       });
       return ret;

@@ -23,7 +23,6 @@ import { mapGetters, mapMutations } from "vuex";
 import { getDiscInfo } from "api/disc";
 import { ERR_OK } from "api/config";
 import { createSong } from "commons/js/song";
-import { getMusic } from "api/song";
 export default {
   data() {
     return {
@@ -84,13 +83,7 @@ export default {
       let ret = [];
       list.forEach(musicData => {
         if (musicData.songmid && musicData.albummid) {
-          getMusic(musicData.songmid).then(res => {
-            if (res.code === ERR_OK) {
-              const svkey = res.data.items;
-              const songVkey = svkey[0].vkey;
-              ret.push(createSong(musicData, songVkey));
-            }
-          });
+          ret.push(createSong(musicData));
         }
       });
       return ret;

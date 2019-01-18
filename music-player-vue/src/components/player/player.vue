@@ -102,14 +102,7 @@
       </div>
     </transition>
     <!-- 防止歌曲未加载完用户进行点击 -->
-    <audio
-      ref="audio"
-      :src="currentSong.url"
-      @canplay="ready"
-      @error="error"
-      @ended="end"
-      @timeupdate="updateTime"
-    ></audio>
+    <audio ref="audio" @canplay="ready" @error="error" @ended="end" @timeupdate="updateTime"></audio>
   </div>
 </template>
 
@@ -121,6 +114,8 @@ import ProgressBar from "base/progress-bar/progress-bar";
 import ProgressCircle from "base/progress-circle/progress-circle";
 import { playMode } from "commons/js/config";
 import { shuffle } from "commons/js/util";
+import { getMusic } from "api/song";
+import { ERR_OK } from "api/config";
 import Lyric from "lyric-parser";
 import Scroll from "base/scroll/scroll";
 
@@ -177,6 +172,7 @@ export default {
     //所以不在data或computed中定义
     this.touch = {};
   },
+
   methods: {
     back() {
       this.setFullScreen(false);
@@ -248,6 +244,7 @@ export default {
       }
     },
     next() {
+      this.clearLyric(this.currentLyric);
       if (!this.songReady) return;
       if (this.playList.length === 1) {
         this.loop();
@@ -264,6 +261,7 @@ export default {
       this.songReady = false;
     },
     prev() {
+      this.clearLyric(this.currentLyric);
       if (!this.songReady) return;
       if (this.playList.length === 1) {
         this.loop();
@@ -297,13 +295,15 @@ export default {
       return `${minute}:${second}`;
     },
     onProgressBarChange(percent) {
-      const currentTime = this.currentSong.duration * percent;
-      this.$refs.audio.currentTime = this.currentSong.duration * percent;
-      if (!this.playing) {
-        this.togglePlaying();
-      }
-      if (this.currentLyric) {
-        this.currentLyric.seek(currentTime * 1000);
+      if (this.songReady) {
+        const currentTime = this.currentSong.duration * percent;
+        this.$refs.audio.currentTime = this.currentSong.duration * percent;
+        if (!this.playing) {
+          this.togglePlaying();
+        }
+        if (this.currentLyric) {
+          this.currentLyric.seek(currentTime * 1000);
+        }
       }
     },
     changeMode() {
@@ -340,6 +340,15 @@ export default {
           //注意异常的处理，对状态进行清理
         });
     },
+    clearLyric(lyric) {
+      if (this.currentLyric) {
+        console.log(this.currentLyric);
+        this.currentLyric.stop();
+        this.currentLyric = null;
+        this.playingLyric = "";
+        this.currentLineNum = 0;
+      }
+    },
     handleLyric({ lineNum, txt }) {
       this.currentLineNum = lineNum;
       if (lineNum > 5) {
@@ -353,7 +362,6 @@ export default {
     middleTouchStart(e) {
       this.touch.initiated = true;
       const touch = e.touches[0];
-      console.log(e);
       this.touch.startX = touch.pageX;
       this.touch.startY = touch.pageY;
     },
@@ -443,39 +451,38 @@ export default {
   },
   watch: {
     currentSong(newSong, oldSong) {
+      if (!newSong.id) return;
       if (newSong.id === oldSong.id) {
         return;
       }
-      if (this.currentLyric) {
-        this.currentLyric.stop();
-      }
+      this.clearLyric(this.currentLyric);
+      getMusic(newSong.mid).then(res => {
+        const newVkey = res.data.items[0].vkey;
+        if (res.code === ERR_OK && newVkey.length > 0) {
+          console.log(newVkey);
+          this.$refs.audio.src = `http://dl.stream.qqmusic.qq.com/C400${
+            newSong.mid
+          }.m4a?vkey=${newVkey}&guid=6442406400&uin=0&fromtag=66`;
+          clearTimeout(this.timer);
+          this.timer = setTimeout(() => {
+            this.$refs.audio.play();
+            this.getLyric();
+          }, 1000);
+        } else {
+          window.alert("无法解析，请换一首");
+          this.setPlayingState(!this.playing);
+          this.songReady = true;
+        }
+      });
       // this.$nextTick(() => {
       //   this.$refs.audio.play();
       //   this.getLyric();
       // });
-      setTimeout(() => {
-        const playPromise = this.$refs.audio.play();
-        if (playPromise !== undefined) {
-          playPromise.then(
-            () => {
-              this.$refs.audio.play();
-              this.getLyric();
-            },
-            () => {
-              window.alert("无法解析，请换一首");
-              this.setPlayingState(!this.playing);
-            }
-          );
-        }
-      }, 1000);
-      //针对微信后台切换JS不执行，可能出现的歌曲播放完songready不置为true
     },
     playing(newPlaying) {
       this.$nextTick(() => {
-        //在回调中执行，确保状态更新了
         if (newPlaying) {
           this.$refs.audio.play();
-          this.getLyric();
         } else {
           this.$refs.audio.pause();
         }

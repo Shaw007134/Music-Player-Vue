@@ -2,7 +2,7 @@ import {getLyric} from 'api/lyric'
 import {Base64} from 'js-base64'
 import {ERR_OK} from 'api/config'
 export default class Song {
-  constructor({ id, mid, singer, name, album, duration, image, url }) {
+  constructor({ id, mid, singer, name, album, duration, image }) {
     this.id = id
     this.mid = mid
     this.singer = singer
@@ -10,7 +10,7 @@ export default class Song {
     this.album = album
     this.duration = duration
     this.image = image
-    this.url = url
+    // this.url = url
   }
   getLyric() {
     if (this.lyric) {
@@ -31,7 +31,7 @@ export default class Song {
 }
 
 
-export function createSong(musicData,songVkey) {
+export function createSong(musicData) {
   return new Song({
     id: musicData.songid,
     mid: musicData.songmid,
@@ -43,7 +43,7 @@ export function createSong(musicData,songVkey) {
     // 歌源url
     // url: `http://thirdparty.gtimg.com/C100${musicData.songmid}.m4a?fromtag=38`
     // url: `http://isure.stream.qqmusic.qq.com/C100${musicData.songmid}.m4a?fromtag=32`
-    url: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}.m4a?vkey=${songVkey}&guid=6442406400&uin=0&fromtag=66`
+    // url: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}.m4a?vkey=${songVkey}&guid=6442406400&uin=0&fromtag=66`
 
     // url: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}/${musicData.songid}.m4a?guid=263427534&fromtag
   })

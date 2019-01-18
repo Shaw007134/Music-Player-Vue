@@ -1,15 +1,7 @@
 <template>
-  <scroll class="suggest" :data="songs">
+  <scroll class="suggest" ref="suggest" :data="songs" :pullup="pullup" @scrollToEnd="searchMore">
     <ul class="suggest-list">
-      <li class="suggest-item" v-show="singer" v-for="item in singer" :key="item.id">
-        <div class="icon">
-          <i :class="getIconCls(item)"></i>
-        </div>
-        <div class="name">
-          <p class="text" v-html="getDisplayName(item)"></p>
-        </div>
-      </li>
-      <li class="suggest-item" v-show="songs" v-for="item in songs" :key="item.id">
+      <li class="suggest-item" v-show="result" v-for="item in result" :key="item.id">
         <div class="icon">
           <i :class="getIconCls(item)"></i>
         </div>
@@ -25,10 +17,13 @@
 import { search } from "api/search";
 import { ERR_OK } from "api/config";
 import { createSong } from "commons/js/song";
-import { getMusic } from "api/song";
-import Scroll from 'base/scroll/scroll'
+import Scroll from "base/scroll/scroll";
+import { playlistMixin } from "commons/js/mixin";
+
 const TYPE_SINGER = "singer";
+const perpage = 20;
 export default {
+  mixins: [playlistMixin],
   props: {
     query: {
       type: String,
@@ -42,19 +37,38 @@ export default {
   data() {
     return {
       page: 1,
-      singer: [],
-      songs: []
+      result: [],
+      pullup: true,
+      hasMore: true
     };
   },
   computed: {},
   methods: {
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? "60px" : "";
+      this.$refs.suggest.$el.style.bottom = bottom;
+      this.$refs.suggest.refresh();
+    },
     search() {
-      search(this.query, this.page, this.showSinger, 20).then(res => {
+      this.hasMore = true;
+      search(this.query, this.page, this.showSinger, perpage).then(res => {
         if (res.code === ERR_OK) {
           console.log(res.data);
-          this.singer = this._getResult(res.data);
-          this.songs = this._normalizeSongs(res.data.song.list)
-          console.log(this.songs)
+          this.result = this._getResult(res.data);
+          this._checkMore(res.data);
+        }
+      });
+    },
+    searchMore() {
+      if (!this.hasMore) {
+        return;
+      }
+      this.page++;
+      search(this.query, this.page, this.showSinger, perpage).then(res => {
+        if (res.code === ERR_OK) {
+          console.log(res.data);
+          this.result = this.result.concat(this._getResult(res.data));
+          this._checkMore(res.data);
         }
       });
     },
@@ -72,26 +86,31 @@ export default {
         return `${item.name} - ${item.singer}`;
       }
     },
+    _checkMore(data) {
+      const song = data.song;
+      if (this.curr_num != song.cur_num) this.curr_num = song.cur_num;
+      if (
+        !song.list.length ||
+        song.curnum + song.curpage * perpage > song.totalnum
+      ) {
+        this.hasMore = false;
+      }
+    },
     _getResult(data) {
       let ret = [];
       if (data.zhida && data.zhida.singerid) {
         ret.push({ ...data.zhida, ...{ type: TYPE_SINGER } });
       }
+      if (data.song) ret = ret.concat(this._normalizeSongs(data.song.list));
       return ret;
     },
     _normalizeSongs(list) {
       let ret = [];
       list.forEach(musicData => {
         if (musicData.songid && musicData.albumid) {
-          getMusic(musicData.songmid).then(res => {
-            if (res.code === ERR_OK) {
-              const svkey = res.data.items;
-              const songVkey = svkey[0].vkey;
-              ret.push(createSong(musicData, songVkey));
-            }
-          })
+          ret.push(createSong(musicData));
         }
-      })
+      });
       return ret;
     }
   },

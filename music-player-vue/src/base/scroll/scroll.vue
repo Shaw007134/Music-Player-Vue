@@ -23,6 +23,10 @@ export default {
     listenScroll: {
       type: Boolean,
       default: false
+    },
+    pullup: {
+      type: Boolean,
+      default: false
     }
   },
   mounted(){
@@ -48,6 +52,14 @@ export default {
           me.$emit('scroll', pos)
           //通过vue实例去调用它的emit方法，去派发一个scroll事件
           //这样我们在外部就可以拿到这个事件以及pos位置，pos是一个对象，有x,y
+        })
+      }
+
+      if(this.pullup) {
+        this.scroll.on('scrollEnd', ()=>{
+          if(this.scroll.y <= (this.scroll.maxScrollY + 50)){
+            this.$emit('scrollToEnd')
+          }
         })
       }
     },
