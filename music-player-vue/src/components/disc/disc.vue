@@ -73,9 +73,9 @@ export default {
           this.desc = cd.desc;
           this.avatar.img = cd.headurl;
           this.avatar.name = cd.nickname;
-          setTimeout(() => {
+          // setTimeout(() => {
             this.songs = this._normalizeSongs(cd.songlist);
-          }, 300);
+          // }, 300);
         }
       });
     },
