@@ -43,17 +43,16 @@ import { mapActions, mapGetters } from "vuex";
 import SearchList from "base/search-list/search-list";
 import Confirm from "base/confirm/confirm";
 import Scroll from "base/scroll/scroll";
-import { playlistMixin } from "commons/js/mixin";
+import { playlistMixin, searchMixin } from "commons/js/mixin";
 
 export default {
-  mixins: [playlistMixin],
+  mixins: [playlistMixin, searchMixin],
   created() {
     this._getHotKey();
   },
   data() {
     return {
       hotKey: [],
-      query: ""
     };
   },
   computed: {
@@ -75,19 +74,6 @@ export default {
       this.$refs.suggest.refresh()
       //通过suggest进行一层事件代理
     },
-    addQuery(query) {
-      this.$refs.searchBox.setQuery(query);
-    },
-    onQueryChange(query) {
-      this.query = query;
-    },
-    blurInput() {
-      this.$refs.searchBox.blur();
-    },
-    saveSearch() {
-      console.log(this.query);
-      this.saveSearchHistory(this.query);
-    },
     showConfirm() {
       this.$refs.confirm.show();
     },
@@ -100,8 +86,6 @@ export default {
       });
     },
     ...mapActions([
-      "saveSearchHistory",
-      "deleteSearchHistory",
       "clearSearchHistory"
     ])
   },
