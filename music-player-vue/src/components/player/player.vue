@@ -341,6 +341,8 @@ export default {
         });
     },
     clearLyric(lyric) {
+      // this.currentTime = 0
+      console.log(this.percent)
       if (this.currentLyric) {
         console.log(this.currentLyric);
         this.currentLyric.stop();
