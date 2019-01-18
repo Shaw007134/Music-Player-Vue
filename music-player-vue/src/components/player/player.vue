@@ -113,16 +113,19 @@ import animations from "create-keyframe-animation";
 import { prefixStyle } from "commons/js/dom";
 import ProgressBar from "base/progress-bar/progress-bar";
 import ProgressCircle from "base/progress-circle/progress-circle";
-import { playMode } from "commons/js/config";
-import { shuffle } from "commons/js/util";
 import { getMusic } from "api/song";
 import { ERR_OK } from "api/config";
 import Lyric from "lyric-parser";
 import Scroll from "base/scroll/scroll";
 import Playlist from 'components/playlist/playlist'
+import {playerMixin} from 'commons/js/mixin'
+import { playMode } from "commons/js/config";
+
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
+
 export default {
+  mixins: [playerMixin],
   data() {
     return {
       songReady: false,
@@ -145,13 +148,7 @@ export default {
     miniIcon() {
       return this.playing ? "icon-pause-mini" : "icon-play-mini";
     },
-    iconMode() {
-      return this.mode === playMode.sequence
-        ? "icon-sequence"
-        : this.mode === playMode.loop
-        ? "icon-loop"
-        : "icon-random";
-    },
+
     disableCls() {
       return this.songReady ? "" : "disable";
     },
@@ -307,24 +304,7 @@ export default {
         }
       }
     },
-    changeMode() {
-      const mode = (this.mode + 1) % 3;
-      this.setPlayMode(mode);
-      let list = null;
-      if (mode === playMode.random) {
-        list = shuffle(this.sequenceList);
-      } else {
-        list = this.sequenceList;
-      }
-      this.resetCurrentIndex(list);
-      this.setPlayList(list);
-    },
-    resetCurrentIndex(list) {
-      let index = list.findIndex(item => {
-        return item.id === this.currentSong.id;
-      });
-      this.setCurrentIndex(index);
-    },
+
     getLyric() {
       this.currentSong
         .getLyric()

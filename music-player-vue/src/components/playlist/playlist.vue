@@ -5,15 +5,15 @@
       <div class="list-wrapper" @click.stop>
         <div class="list-header">
           <h1 class="title">
-            <i class="icon"></i>
+            <i class="icon" :class="iconMode"></i>
             <span class="text"></span>
-            <span class="clear">
+            <span class="clear" @click="showConfirm">
               <i class="icon-clear"></i>
             </span>
           </h1>
         </div>
         <scroll class="list-content" ref="listContent" :data="sequenceList">
-          <ul>
+          <transition-group name="list" tag="ul">
             <li ref="listItem" @click="selectItem(item,index)" class="item" v-for="(item,index) in sequenceList" :key="item.id">
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{item.name}}</span>
@@ -24,7 +24,7 @@
                 <i class="icon-delete"></i>
               </span>
             </li>
-          </ul>
+          </transition-group>
         </scroll>
         <div class="list-operate">
           <div class="add">
@@ -36,6 +36,7 @@
           <span>关闭</span>
         </div>
       </div>
+      <confirm ref="confirm" @confirm="confirmClear" text="清空所有播放列表" confirmBtnText="清空"></confirm>
     </div>
   </transition>
 </template>
@@ -45,7 +46,11 @@
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 import Scroll from 'base/scroll/scroll'
 import {playMode} from 'commons/js/config'
+import Confirm from 'base/confirm/confirm'
+import {playerMixin} from 'commons/js/mixin'
+
 export default {
+  mixins: [playerMixin],
   data() {
     return {
       showFlag: false,
@@ -100,24 +105,30 @@ export default {
         this.hide()
       }
     },
-    ...mapMutations({
-      setCurrentIndex: 'SET_CURRENT_INDEX',
-      setPlayingState: 'SET_PLAYING_STATE'
-    }),
+    showConfirm() {
+      this.$refs.confirm.show()
+    },
+    confirmClear() {
+      this.deleteSongList()
+      this.hide()
+    },
     ...mapActions([
-      'deleteSong'
+      'deleteSong',
+      'deleteSongList'
     ])
   },
   watch: {
     currentSong(newSong, oldSong) {
       if(!this.showFlag || newSong.id === oldSong.id){
+        console.log(this.showFlag)
         return
       }
       this.scrollToCurrent(newSong)
     }
   },
   components: {
-    Scroll
+    Scroll,
+    Confirm
   }
 };
 </script>

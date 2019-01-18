@@ -1,6 +1,6 @@
 <template>
   <transition name="confirm-fade">
-    <div class="confirm" v-show="showFlag">
+    <div class="confirm" v-show="showFlag" @click.stop>
       <div class="confirm-wrapper">
         <div class="confirm-content">
           <p class="text">{{text}}</p>
@@ -105,7 +105,7 @@ export default {
       background: $color-highlight-background;
       .text {
         padding: 19px 15px;
-        line-height: 22px;
+        line-height: 18px;
         text-align: center;
         font-size: $font-size-large;
         color: $color-text-l;
