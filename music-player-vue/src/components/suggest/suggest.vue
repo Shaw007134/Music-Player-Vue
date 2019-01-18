@@ -22,7 +22,7 @@ import Scroll from "base/scroll/scroll";
 import { playlistMixin } from "commons/js/mixin";
 import Loading from 'base/loading/loading'
 import Singer from 'commons/js/singer'
-import { mapMutations } from 'vuex';
+import { mapMutations,mapActions } from 'vuex';
 const TYPE_SINGER = "singer";
 const perpage = 20;
 export default {
@@ -103,6 +103,9 @@ export default {
           path: '/search/${singer.id}'
         })
         this.setSinger(singer)
+      } else {
+        console.log(item)
+        this.insertSong(item)
       }
     },
     _checkMore(data) {
@@ -134,7 +137,10 @@ export default {
     },
     ...mapMutations({
       setSinger: 'SET_SINGER'
-    })
+    }),
+    ...mapActions([
+      'insertSong'
+    ])
   },
   watch: {
     query() {

@@ -342,9 +342,9 @@ export default {
     },
     clearLyric(lyric) {
       // this.currentTime = 0
-      console.log(this.percent)
+      // console.log(this.percent)
       if (this.currentLyric) {
-        console.log(this.currentLyric);
+        // console.log(this.currentLyric);
         this.currentLyric.stop();
         this.currentLyric = null;
         this.playingLyric = "";
@@ -461,7 +461,7 @@ export default {
       getMusic(newSong.mid).then(res => {
         const newVkey = res.data.items[0].vkey;
         if (res.code === ERR_OK && newVkey.length > 0) {
-          console.log(newVkey);
+          // console.log(newVkey);
           this.$refs.audio.src = `http://dl.stream.qqmusic.qq.com/C400${
             newSong.mid
           }.m4a?vkey=${newVkey}&guid=6442406400&uin=0&fromtag=66`;
