@@ -10,8 +10,6 @@ const FAVORITE_KEY = '__favorite__'
 const FAVORITE_MAX_LENGTH = 200
 
 function insertArray(arr, val, compare, maxLen) {
-  console.log(val)
-  console.log(arr)
   const index = arr.findIndex(compare)
   if(index === 0) {
     return
