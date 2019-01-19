@@ -103,7 +103,7 @@
     </transition>
     <playlist ref="playlist"></playlist>
     <!-- 防止歌曲未加载完用户进行点击 -->
-    <audio ref="audio" @canplay="ready" @error="error" @ended="end" @timeupdate="updateTime"></audio>
+    <audio ref="audio" @play="ready" @error="error" @ended="end" @timeupdate="updateTime"></audio>
   </div>
 </template>
 
@@ -242,6 +242,8 @@ export default {
       if (!this.songReady) return;
       if (this.playList.length === 1) {
         this.loop();
+         return
+        //针对只有一首歌的清空，不需要再执行songReady 为false了
       } else {
         let index = this.currentIndex + 1;
         if (index === this.playList.length) {
@@ -259,6 +261,7 @@ export default {
       if (!this.songReady) return;
       if (this.playList.length === 1) {
         this.loop();
+        return
       } else {
         let index = this.currentIndex - 1;
         if (index === -1) {
@@ -306,6 +309,11 @@ export default {
       this.currentSong
         .getLyric()
         .then(lyric => {
+          //由于歌词是异步的，可能获取到歌词已经切换到下一首歌了，
+          //所有发现当前歌曲歌词不等于lyric时，就不调用之前的getLyric中的赋值操作直接返回
+          if (this.currentSong.lyric !== lyric) {
+            return
+          }
           this.currentLyric = new Lyric(lyric, this.handleLyric);
           if (this.playing) {
             this.currentLyric.play();
