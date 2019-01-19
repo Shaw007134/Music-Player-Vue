@@ -1,5 +1,5 @@
 import {playMode} from 'commons/js/config'
-import {loadSearch} from 'commons/js/cache'
+import {loadSearch,loadPlay} from 'commons/js/cache'
 const state = {
   singer: {},
   playing: false,
@@ -10,7 +10,8 @@ const state = {
   currentIndex: -1,
   disc: {},
   topList: {},
-  searchHistory: loadSearch()
+  searchHistory: loadSearch(),
+  playHistory: loadPlay()
 }
 
 export default state
