@@ -19,9 +19,18 @@
               <song-list @select="selectSong" :songs="playHistory"></song-list>
             </div>
           </scroll>
-          <scroll ref="searchList" class="list-scroll" v-if="currentIndex === 1" :data="searchHistory">
+          <scroll
+            ref="searchList"
+            class="list-scroll"
+            v-if="currentIndex === 1"
+            :data="searchHistory"
+          >
             <div class="list-inner">
-              <search-list @select="addQuery" @delete="deleteSearchHistory" :searches="searchHistory"></search-list>
+              <search-list
+                @select="addQuery"
+                @delete="deleteSearchHistory"
+                :searches="searchHistory"
+              ></search-list>
             </div>
           </scroll>
         </div>
@@ -32,9 +41,15 @@
           :query="query"
           :showSinger="showSinger"
           @listScroll="blurInput"
-          @select="saveSearch"
+          @select="selectSuggest"
         ></suggest>
       </div>
+      <top-tip ref="topTip">
+        <div class="tip-title">
+          <i class="icon-ok"></i>
+          <span class="text">1首歌曲已经添加到播放列表</span>
+        </div>
+      </top-tip>
     </div>
   </transition>
 </template>
@@ -47,7 +62,8 @@ import Switches from "base/switches/switches";
 import Scroll from "base/scroll/scroll";
 import { mapGetters, mapActions } from "vuex";
 import SongList from "base/song-list/song-list";
-import SearchList from 'base/search-list/search-list'
+import SearchList from "base/search-list/search-list";
+import TopTip from "base/top-tip/top-tip";
 import Song from "commons/js/song";
 export default {
   mixins: [searchMixin],
@@ -65,13 +81,13 @@ export default {
   methods: {
     show() {
       this.showFlag = true;
-      setTimeout(()=>{
+      setTimeout(() => {
         if (this.currentIndex === 0) {
-          this.$refs.songList.refresh()
+          this.$refs.songList.refresh();
         } else {
-          this.$refs.searchList.refresh()
+          this.$refs.searchList.refresh();
         }
-      }, 20)
+      }, 20);
     },
     hide() {
       this.showFlag = false;
@@ -82,7 +98,15 @@ export default {
     selectSong(song, index) {
       if (index !== 0) {
         this.insertSong(new Song(song));
+        this.showTip();
       }
+    },
+    selectSuggest() {
+      this.saveSearch();
+      this.showTip();
+    },
+    showTip() {
+      this.$refs.topTip.show();
     },
     ...mapActions(["insertSong"])
   },
@@ -92,7 +116,8 @@ export default {
     Switches,
     Scroll,
     SongList,
-    SearchList
+    SearchList,
+    TopTip
   }
 };
 </script>
