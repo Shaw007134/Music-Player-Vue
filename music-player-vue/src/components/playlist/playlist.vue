@@ -12,7 +12,7 @@
             </span>
           </h1>
         </div>
-        <scroll class="list-content" ref="listContent" :data="sequenceList">
+        <scroll class="list-content" ref="listContent" :refreshDelay="refreshDelay" :data="sequenceList">
           <transition-group name="list" tag="ul">
             <li
               ref="listItem"
@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       showFlag: false,
+      refreshDelay: 100
     }
   },
   computed: {
