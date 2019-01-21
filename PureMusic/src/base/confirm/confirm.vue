@@ -38,18 +38,18 @@ export default {
   },
   methods: {
     show() {
-      this.showFlag = true;
+      this.showFlag = true
     },
     hide() {
-      this.showFlag = false;
+      this.showFlag = false
     },
     cancle() {
-      this.hide();
-      this.$emit("cancle");
+      this.hide()
+      this.$emit("cancle")
     },
     confirm() {
-      this.hide();
-      this.$emit("confirm");
+      this.hide()
+      this.$emit("confirm")
     }
   }
 };

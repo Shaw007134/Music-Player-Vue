@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { commonParams,LYRIC_URL } from './config'
+import { commonParams, LYRIC_URL } from './config'
 
-export function getLyric(mid) {
+export function getLyric (mid) {
   const data = Object.assign({}, commonParams, {
     g_tk: 5381,
     songmid: mid,

@@ -1,8 +1,8 @@
-import jsonp from 'commons/js/jsonp';
-import {commonParams, options, SINGER_URL, SINGER_DETAIL_URL} from './config';
+import jsonp from 'commons/js/jsonp'
+import { commonParams, options, SINGER_URL, SINGER_DETAIL_URL } from './config'
 
-export function getSingerList() {
-  const data = Object.assign({}, commonParams,{
+export function getSingerList () {
+  const data = Object.assign({}, commonParams, {
     channel: 'singer',
     page: 'list',
     key: 'all_all_all',
@@ -22,8 +22,8 @@ export function getSingerList() {
   return jsonp(SINGER_URL, data, options)
 }
 
-export function getSingerDetail(singerId) {
-  const data = Object.assign({}, commonParams,{
+export function getSingerDetail (singerId) {
+  const data = Object.assign({}, commonParams, {
     g_tk: 1471438518,
     uin: 0,
     // loginUin: 0,
@@ -38,6 +38,6 @@ export function getSingerDetail(singerId) {
     num: 100,
     songstatus: 1
   })
-  //根据歌手id获取其mid，以及其100首歌曲(res.data.list)中
+  // 根据歌手id获取其mid，以及其100首歌曲(res.data.list)中
   return jsonp(SINGER_DETAIL_URL, data, options)
 }

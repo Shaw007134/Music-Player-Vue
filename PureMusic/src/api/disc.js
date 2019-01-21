@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {commonParams, DISC_DETAIL_URL} from './config';
+import { commonParams, DISC_DETAIL_URL } from './config'
 
-export function getDiscInfo(disstid) {
+export function getDiscInfo (disstid) {
   const data = Object.assign({}, commonParams, {
     disstid,
     type: 1,
@@ -13,10 +13,12 @@ export function getDiscInfo(disstid) {
     needNewCode: 0
   })
 
-  return axios.get(DISC_DETAIL_URL, {
-    params: data
-  }).then((res) => {
-    console.log(res.data)
-    return Promise.resolve(res.data)
-  })
+  return axios
+    .get(DISC_DETAIL_URL, {
+      params: data
+    })
+    .then(res => {
+      console.log(res.data)
+      return Promise.resolve(res.data)
+    })
 }
