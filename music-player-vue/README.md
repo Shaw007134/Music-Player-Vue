@@ -1,4 +1,4 @@
-# music-player-vue
+# Music-Player-Vue
 
 > Rewrite Music-Player
 
