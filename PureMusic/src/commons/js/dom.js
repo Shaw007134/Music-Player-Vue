@@ -1,23 +1,23 @@
-export function addClass(el, className){
-  if(hasClass(el, className)){
+export function addClass (el, className) {
+  if (hasClass(el, className)) {
     return
   }
-  let newClass = el.className.split(' ');
-  newClass.push(className);
-  el.className = newClass.join(' ');
+  let newClass = el.className.split(' ')
+  newClass.push(className)
+  el.className = newClass.join(' ')
 }
 
-export function hasClass(el, className){
-  let reg = new RegExp('(^|\\s)'+className+'(\\s|$)');
-  return reg.test(el.className);
+export function hasClass (el, className) {
+  let reg = new RegExp('(^|\\s)' + className + '(\\s|$)')
+  return reg.test(el.className)
 }
 
-export function getData(el, name, val) {
-  const prefix = 'data-';
-  name = prefix + name;
-  if(val) {
+export function getData (el, name, val) {
+  const prefix = 'data-'
+  name = prefix + name
+  if (val) {
     return el.setAttribute(name, val)
-  }else{
+  } else {
     return el.getAttribute(name)
   }
 }
@@ -32,7 +32,7 @@ let vendor = (() => {
     ms: 'msTransform',
     standard: 'transform'
   }
- 
+
   for (let key in transformNames) {
     if (elementStyle[transformNames[key]] !== undefined) {
       return key
@@ -42,7 +42,7 @@ let vendor = (() => {
   return false
 })()
 
-export function prefixStyle(style) {
+export function prefixStyle (style) {
   if (vendor === false) {
     return false
   }

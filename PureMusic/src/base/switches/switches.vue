@@ -1,8 +1,8 @@
 <template>
   <ul class="switches">
-    <li class="switch-item" 
-        v-for="(item,index) in switches" 
-        :key="item.id" 
+    <li class="switch-item"
+        v-for="(item,index) in switches"
+        :key="item.id"
         :class="{'active':currentIndex === index}"
         @click="switchItem(index)"
     >
@@ -26,7 +26,7 @@ export default {
   methods: {
     switchItem(index) {
       console.log(index)
-      this.$emit('switch',index)
+      this.$emit('switch', index)
     }
   }
 }
@@ -55,4 +55,3 @@ export default {
   }
 }
 </style>
-

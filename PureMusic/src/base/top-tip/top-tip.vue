@@ -6,7 +6,6 @@
   </transition>
 </template>
 
-
 <script>
 export default {
   data() {
@@ -24,9 +23,9 @@ export default {
     show() {
       this.showFlag = true
       clearTimeout(this.timer)
-      this.timer = setTimeout( ()=> {
+      this.timer = setTimeout(() => {
         this.hide()
-      },this.delay)
+      }, this.delay)
     },
     hide() {
       this.showFlag = false
@@ -52,4 +51,3 @@ export default {
   }
 }
 </style>
-

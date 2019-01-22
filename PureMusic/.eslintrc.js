@@ -6,15 +6,19 @@ module.exports = {
     parser: 'babel-eslint'
   },
   env: {
-    browser: true,
+    browser: true
   },
   // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
   // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-  extends: ['plugin:vue/essential', 'airbnb-base'],
-  // required to lint *.vue files
-  plugins: [
-    'vue'
+  extends: [
+    // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
+    // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
+    'plugin:vue/essential', 
+    // https://github.com/standard/standard/blob/master/docs/RULES-en.md
+    'standard'
   ],
+  // required to lint *.vue files
+  plugins: ['vue'],
   // check if imports actually resolve
   settings: {
     'import/resolver': {
@@ -26,24 +30,34 @@ module.exports = {
   // add your custom rules here
   rules: {
     // don't require .vue extension when importing
-    'import/extensions': ['error', 'always', {
-      js: 'never',
-      vue: 'never'
-    }],
+    'import/extensions': [
+      'error',
+      'always',
+      {
+        js: 'never',
+        vue: 'never'
+      }
+    ],
     // disallow reassignment of function parameters
     // disallow parameter object manipulation except for specific exclusions
-    'no-param-reassign': ['error', {
-      props: true,
-      ignorePropertyModificationsFor: [
-        'state', // for vuex state
-        'acc', // for reduce accumulators
-        'e' // for e.returnvalue
-      ]
-    }],
+    'no-param-reassign': [
+      'error',
+      {
+        props: true,
+        ignorePropertyModificationsFor: [
+          'state', // for vuex state
+          'acc', // for reduce accumulators
+          'e' // for e.returnvalue
+        ]
+      }
+    ],
     // allow optionalDependencies
-    'import/no-extraneous-dependencies': ['error', {
-      optionalDependencies: ['test/unit/index.js']
-    }],
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        optionalDependencies: ['test/unit/index.js']
+      }
+    ],
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     // 检测文件末尾是否为空行
@@ -51,6 +65,6 @@ module.exports = {
     'space-before-function-paren': 0,
     // 统一换行符，"\n" unix(for LF) and "\r\n" for windows(CRLF)，默认unix
     // off或0: 禁用规则
-    'linebreak-style': 'off',
+    'linebreak-style': 'off'
   }
 }

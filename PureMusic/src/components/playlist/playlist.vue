@@ -48,26 +48,25 @@
   </transition>
 </template>
 
-
 <script>
-import {mapActions} from 'vuex'
+import { mapActions } from 'vuex'
 import Scroll from 'base/scroll/scroll'
-import {playMode} from 'commons/js/config'
+import { playMode } from 'commons/js/config'
 import Confirm from 'base/confirm/confirm'
-import {playerMixin} from 'commons/js/mixin'
+import { playerMixin } from 'commons/js/mixin'
 import AddSong from 'components/add-song/add-song'
 export default {
   mixins: [playerMixin],
   data() {
     return {
       showFlag: false,
-      refreshDelay: 100
+      refreshDelay: 300
     }
   },
   computed: {
     modeText() {
-      return this.mode === playMode.sequence ? '顺序播放' : 
-        this.mode === playMode.random ? '随机播放' : '单曲循环'
+      return this.mode === playMode.sequence ? '顺序播放'
+        : this.mode === playMode.random ? '随机播放' : '单曲循环'
     }
   },
   methods: {
@@ -75,6 +74,8 @@ export default {
       this.showFlag = true
       setTimeout(() => {
         this.$refs.listContent.refresh()
+        console.log('show 调用了scroll to current')
+        console.log(this.$refs.listItem)
         this.scrollToCurrent(this.currentSong)
       })
     },
@@ -82,14 +83,14 @@ export default {
       this.showFlag = false
     },
     getCurrentIcon(item) {
-      if(this.currentSong.id === item.id) {
+      if (this.currentSong.id === item.id) {
         return 'icon-play'
       }
       return ''
     },
     selectItem(item, index) {
-      if(this.mode === playMode.random){
-        index = this.playList.findIndex((song)=>{
+      if (this.mode === playMode.random) {
+        index = this.playList.findIndex((song) => {
           return song.id === item.id
         })
       }
@@ -98,15 +99,21 @@ export default {
     },
     scrollToCurrent(current) {
       const index = this.sequenceList.findIndex((song) => {
-        return current.id === song.id
+        return this.currentSong.id === song.id
       })
+      // this.$nextTick(()=>{
+      console.log(index)
+ 
+      console.log(this.$refs.listItem[index])
+      console.log(this.sequenceList[index])
+      let currentItem = this.$refs.listContent.$el.children[0].children[index]
       this.$refs.listContent.scrollToElement(
-        this.$refs.listItem[index],300)
+        currentItem, 300)
+      // })
     },
-    deleteOne(item){
-      console.log(item)
+    deleteOne(item) {
       this.deleteSong(item)
-      if(!this.playList.length){
+      if (!this.playList.length) {
         this.hide()
       }
     },
@@ -127,10 +134,15 @@ export default {
   },
   watch: {
     currentSong(newSong, oldSong) {
-      if(!this.showFlag || newSong.id === oldSong.id){
-        console.log(this.showFlag)
+      console.log(newSong)
+      // if(Object.keys(oldSong).length === 0 && oldSong.constructor === Object || newSong.id === oldSong.id){
+      //   console.log(this.showFlag)
+      //   return
+      // }
+      if (!this.showFlag || newSong.id === oldSong.id) {
         return
       }
+      console.log('watch 调用了scrollToCurrent')
       this.scrollToCurrent(newSong)
     }
   },
@@ -139,9 +151,8 @@ export default {
     Confirm,
     AddSong
   }
-};
+}
 </script>
-
 
 <style lang="scss" scoped>
 @import "commons/style/variable.scss";

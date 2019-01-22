@@ -1,6 +1,6 @@
-import { shuffle } from "commons/js/util";
-import { mapGetters, mapMutations, mapActions } from "vuex";
-import { playMode } from "commons/js/config";
+import { shuffle } from 'commons/js/util'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { playMode } from 'commons/js/config'
 
 export const playlistMixin = {
   computed: {
@@ -8,19 +8,19 @@ export const playlistMixin = {
       'playList'
     ])
   },
-  mounted() {
+  mounted () {
     this.handlePlaylist(this.playList)
   },
-  activated() {
-    this.handlePlaylist(this.playList)    
+  activated () {
+    this.handlePlaylist(this.playList)
   },
   watch: {
-    playList(newVal) {
+    playList (newVal) {
       this.handlePlaylist(newVal)
     }
   },
   methods: {
-    handlePlaylist() {
+    handlePlaylist () {
       throw new Error('component must implement handlePlaylist method')
     }
   }
@@ -28,12 +28,12 @@ export const playlistMixin = {
 
 export const playerMixin = {
   computed: {
-    iconMode() {
+    iconMode () {
       return this.mode === playMode.sequence
-        ? "icon-sequence"
+        ? 'icon-sequence'
         : this.mode === playMode.loop
-        ? "icon-loop"
-        : "icon-random";
+          ? 'icon-loop'
+          : 'icon-random'
     },
     ...mapGetters([
       'sequenceList',
@@ -45,83 +45,83 @@ export const playerMixin = {
     ])
   },
   methods: {
-    changeMode() {
-      const mode = (this.mode + 1) % 3;
-      this.setPlayMode(mode);
-      let list = null;
+    changeMode () {
+      const mode = (this.mode + 1) % 3
+      this.setPlayMode(mode)
+      let list = null
       if (mode === playMode.random) {
-        list = shuffle(this.sequenceList);
+        list = shuffle(this.sequenceList)
       } else {
-        list = this.sequenceList;
+        list = this.sequenceList
       }
-      this.resetCurrentIndex(list);
-      this.setPlayList(list);
+      this.resetCurrentIndex(list)
+      this.setPlayList(list)
     },
-    resetCurrentIndex(list) {
+    resetCurrentIndex (list) {
       let index = list.findIndex(item => {
-        return item.id === this.currentSong.id;
-      });
-      this.setCurrentIndex(index);
+        return item.id === this.currentSong.id
+      })
+      this.setCurrentIndex(index)
     },
-    getFavoriteIcon(song){
-      if(this.isFavorite(song)){
+    getFavoriteIcon (song) {
+      if (this.isFavorite(song)) {
         return 'icon-favorite'
       }
       return 'icon-not-favorite'
     },
-    toggleFavorite(song){
-      if(this.isFavorite(song)){
+    toggleFavorite (song) {
+      if (this.isFavorite(song)) {
         this.deleteFavoriteList(song)
       } else {
         this.saveFavoriteList(song)
       }
     },
-    isFavorite(song){
-      const index = this.favoriteList.findIndex((item)=>{
+    isFavorite (song) {
+      const index = this.favoriteList.findIndex((item) => {
         return item.id === song.id
       })
       return index > -1
     },
     ...mapMutations({
-      setPlayingState: "SET_PLAYING_STATE",
-      setCurrentIndex: "SET_CURRENT_INDEX",
-      setPlayMode: "SET_PLAY_MODE",
-      setPlayList: "SET_PLAYLIST",
+      setPlayingState: 'SET_PLAYING_STATE',
+      setCurrentIndex: 'SET_CURRENT_INDEX',
+      setPlayMode: 'SET_PLAY_MODE',
+      setPlayList: 'SET_PLAYLIST'
     }),
     ...mapActions([
       'saveFavoriteList',
       'deleteFavoriteList'
     ])
-  },
+  }
 }
 
 export const searchMixin = {
-  data() {
+  data () {
     return {
-      query: "",
+      query: '',
       refreshDelay: 100
-    };
+    }
   },
   computed: {
-    ...mapGetters(["searchHistory"])
+    ...mapGetters(['searchHistory'])
   },
   methods: {
-    blurInput() {
-      this.$refs.searchBox.blur();
+    blurInput () {
+      this.$refs.searchBox.blur()
     },
-    saveSearch() {
-      console.log(this.query);
-      this.saveSearchHistory(this.query);
+    saveSearch () {
+      console.log(this.query)
+      this.saveSearchHistory(this.query)
     },
-    addQuery(query) {
-      this.$refs.searchBox.setQuery(query);
+    addQuery (query) {
+      this.$refs.searchBox.setQuery(query)
     },
-    onQueryChange(query) {
-      this.query = query;
+    onQueryChange (query) {
+      this.query = query
     },
     ...mapActions([
-      "saveSearchHistory",
-      "deleteSearchHistory",
+      'saveSearchHistory',
+      'deleteSearchHistory'
     ])
-  },
+  }
 }

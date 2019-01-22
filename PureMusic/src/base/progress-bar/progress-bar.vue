@@ -2,7 +2,7 @@
   <div class="progress-bar" ref="progressBar" @click="progressClick">
     <div class="bar-inner">
       <div class="progress" ref="progress">
-        <div class="progress-btn-wrapper" 
+        <div class="progress-btn-wrapper"
              ref="progressBtn"
              @touchstart.prevent="progressTouchStart"
              @touchmove.prevent="progressTouchMove"
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import {prefixStyle} from 'commons/js/dom'
+import { prefixStyle } from 'commons/js/dom'
 const progressBtnWidth = 16
 const transform = prefixStyle('transform')
 
@@ -45,12 +45,12 @@ export default {
       this.touch.left = this.$refs.progress.clientWidth
     },
     progressTouchMove(e) {
-      if(!this.touch.initiated) {
+      if (!this.touch.initiated) {
         return
       }
       const deltaX = e.touches[0].pageX - this.touch.startX
-      const offsetWidth = 
-        Math.min(Math.max(0,this.touch.left + deltaX),
+      const offsetWidth =
+        Math.min(Math.max(0, this.touch.left + deltaX),
           this._getbarWidth()
         )
       this._offset(offsetWidth)
@@ -74,19 +74,19 @@ export default {
     _triggerPercent() {
       const barWidth = this._getbarWidth()
       const percent = this.$refs.progress.clientWidth / barWidth
-      this.$emit('percentChange',percent)
+      this.$emit('percentChange', percent)
     }
   },
   watch: {
     percent(newPercent) {
-      if(newPercent >= 0 && !this.touch.initiated) {
+      if (newPercent >= 0 && !this.touch.initiated) {
         const barWidth = this._getbarWidth()
-        const offsetWidth =  newPercent * barWidth
+        const offsetWidth = newPercent * barWidth
         this._offset(offsetWidth)
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -127,4 +127,3 @@ export default {
   }
 }
 </style>
-

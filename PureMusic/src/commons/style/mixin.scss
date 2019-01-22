@@ -1,17 +1,19 @@
 //文本溢出省略号显示
-@mixin ellipsis($line:1){
+@mixin ellipsis($line: 1, $lineHeight: 1.3em) {
   @if $line==1 {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-  }
-  @else {
-      display: -webkit-box;
-      white-space: normal;
-      -webkit-line-clamp: $line;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: block;
+    display: -webkit-box;
+    max-width: 100%;
+    -webkit-line-clamp: $line;
+    /*! autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /*! autoprefixer: on */
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -33,18 +35,18 @@
     bottom: 0;
     width: 100%;
     border-bottom: 1px solid $color;
-    content: ''
+    content: '';
   }
-};
+}
 
-@mixin border-none () {
+@mixin border-none() {
   &:after {
     display: none;
   }
 }
 
 // 拓展小图标点击区域
-@mixin extend-click () {
+@mixin extend-click() {
   position: relative;
   &::before {
     content: '.';

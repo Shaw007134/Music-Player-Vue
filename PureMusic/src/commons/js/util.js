@@ -1,9 +1,9 @@
-//获取max和min中间的数，这个数可以包括max，也可以包括min
-function getRandomInt(min, max) {
+// 获取max和min中间的数，这个数可以包括max，也可以包括min
+function getRandomInt (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-export function shuffle(arr) {
+export function shuffle (arr) {
   let _arr = arr.slice()
   for (let i = 0; i < _arr.length; i++) {
     let j = getRandomInt(0, i)
@@ -14,8 +14,8 @@ export function shuffle(arr) {
   return _arr
 }
 
-//对函数进行节流，返回新的函数，这个新函数会延迟执行要节流的函数
-export function debounce(func, delay) {
+// 对函数进行节流，返回新的函数，这个新函数会延迟执行要节流的函数
+export function debounce (func, delay) {
   let timer
   return function (...args) {
     if (timer) {
@@ -23,6 +23,6 @@ export function debounce(func, delay) {
     }
     timer = setTimeout(() => {
       func.apply(this, args)
-    },delay)
+    }, delay)
   }
 }

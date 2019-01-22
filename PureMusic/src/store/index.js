@@ -16,7 +16,7 @@ export default new Vuex.Store({
   state,
   mutations,
   strict: debug,
-  //严格模式检测state的修改是否来自mutation
-  //不建议在production使用
+  // 严格模式检测state的修改是否来自mutation
+  // 不建议在production使用
   plugins: debug ? [createLogger()] : []
 })

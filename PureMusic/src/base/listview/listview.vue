@@ -49,24 +49,24 @@
 </template>
 
 <script>
-import Scroll from "base/scroll/scroll";
-import Loading from "base/loading/loading";
-import { getData } from "commons/js/dom";
-const ANCHOR_HEIGHT = 18;
-const TITLE_HEIGHT = 30;
+import Scroll from 'base/scroll/scroll'
+import Loading from 'base/loading/loading'
+import { getData } from 'commons/js/dom'
+const ANCHOR_HEIGHT = 18
+const TITLE_HEIGHT = 30
 export default {
   created() {
-    this.touch = {};
-    this.listenScroll = true;
-    this.listHeight = [];
-    this.probeType = 3;
+    this.touch = {}
+    this.listenScroll = true
+    this.listHeight = []
+    this.probeType = 3
   },
   data() {
     return {
       scrollY: -1,
       currentIndex: 0,
       diff: -1
-    };
+    }
   },
   props: {
     data: {
@@ -77,109 +77,109 @@ export default {
   computed: {
     shortcutList() {
       return this.data.map(group => {
-        return group.title.substr(0, 1);
-      });
+        return group.title.substr(0, 1)
+      })
     },
     fixedTitle() {
       if (this.scrollY > 0) {
-        return "";
+        return ''
       }
       return this.data[this.currentIndex]
         ? this.data[this.currentIndex].title
-        : "";
+        : ''
     }
   },
   methods: {
     selectItem(item) {
-      this.$emit("select", item);
+      this.$emit('select', item)
     },
     onShortcutTouchStart(e) {
-      let anchorIndex = getData(e.target, "index");
-      let firstTouch = e.touches[0];
-      this.touch.y1 = firstTouch.pageY;
-      this.touch.anchorIndex = anchorIndex;
-      //touches获得触摸的位置，touches[0]是第一个
-      this._scrollTo(anchorIndex);
+      let anchorIndex = getData(e.target, 'index')
+      let firstTouch = e.touches[0]
+      this.touch.y1 = firstTouch.pageY
+      this.touch.anchorIndex = anchorIndex
+      // touches获得触摸的位置，touches[0]是第一个
+      this._scrollTo(anchorIndex)
     },
     onShortcutTouchMove(e) {
-      let firstTouch = e.touches[0];
-      this.touch.y2 = firstTouch.pageY;
-      //delta向下取整
-      let delta = ((this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT) | 0;
-      let anchorIndex = parseInt(this.touch.anchorIndex) + delta;
-      this._scrollTo(anchorIndex);
+      let firstTouch = e.touches[0]
+      this.touch.y2 = firstTouch.pageY
+      // delta向下取整
+      let delta = ((this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT) | 0
+      let anchorIndex = parseInt(this.touch.anchorIndex) + delta
+      this._scrollTo(anchorIndex)
     },
     refresh() {
-      this.$refs.listview.refresh();
+      this.$refs.listview.refresh()
     },
     scroll(pos) {
-      this.scrollY = pos.y;
-      //这里会调用scrollY方法，将pos.y作为参数传入
+      this.scrollY = pos.y
+      // 这里会调用scrollY方法，将pos.y作为参数传入
     },
     _scrollTo(index) {
-      //参数0表示无须动画，无滚动时间
+      // 参数0表示无须动画，无滚动时间
       if (!index && index !== 0) {
-        return;
+        return
       }
       if (index < 0) {
-        index = 0;
+        index = 0
       } else if (index > this.listHeight.length - 2) {
-        index = this.listHeight.length - 2;
+        index = this.listHeight.length - 2
       }
-      this.scrollY = -this.listHeight[index];
+      this.scrollY = -this.listHeight[index]
       // this.currentIndex = index
-      this.$refs.listview.scrollToElement(this.$refs.listgroup[index], 0);
+      this.$refs.listview.scrollToElement(this.$refs.listgroup[index], 0)
     },
     _calculateHeight() {
-      this.listHeight = [];
-      const list = this.$refs.listgroup;
-      let height = 0;
-      this.listHeight.push(height);
+      this.listHeight = []
+      const list = this.$refs.listgroup
+      let height = 0
+      this.listHeight.push(height)
       for (let i = 0; i < list.length; i++) {
-        let item = list[i];
-        height += item.clientHeight;
-        this.listHeight.push(height);
+        let item = list[i]
+        height += item.clientHeight
+        this.listHeight.push(height)
       }
     }
   },
   watch: {
     data() {
       setTimeout(() => {
-        this._calculateHeight();
-      }, 20);
+        this._calculateHeight()
+      }, 20)
     },
     scrollY(newY) {
-      const listHeight = this.listHeight;
+      const listHeight = this.listHeight
       if (newY > 0) {
-        this.currentIndex = 0;
-        return;
+        this.currentIndex = 0
+        return
       }
       for (let i = 0; i < listHeight.length - 1; i++) {
-        let height1 = listHeight[i];
-        let height2 = listHeight[i + 1];
+        let height1 = listHeight[i]
+        let height2 = listHeight[i + 1]
         if (-newY >= height1 && -newY < height2) {
-          this.currentIndex = i;
-          this.diff = height2 + newY;
-          return;
+          this.currentIndex = i
+          this.diff = height2 + newY
+          return
         }
       }
-      this.currentIndex = listHeight.length - 1;
+      this.currentIndex = listHeight.length - 1
     },
     diff(newVal) {
       let fixedTop =
-        newVal > 0 && newVal < TITLE_HEIGHT ? newVal - TITLE_HEIGHT : 0;
+        newVal > 0 && newVal < TITLE_HEIGHT ? newVal - TITLE_HEIGHT : 0
       if (this.fixedTop === fixedTop) {
-        return;
+        return
       }
-      this.fixedTop = fixedTop;
-      this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`;
+      this.fixedTop = fixedTop
+      this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`
     }
   },
   components: {
     Scroll,
     Loading
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

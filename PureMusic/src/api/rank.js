@@ -10,7 +10,7 @@ export function getTopList () {
   return jsonp(RANKING_LIST_URL, data, options)
 }
 
-export function getTopList_F (topid) {
+export function getTopListFull (topid) {
   const data = Object.assign({}, commonParams, {
     topid,
     platform: 'h5',

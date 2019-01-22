@@ -20,7 +20,6 @@
   </div>
 </template>
 
-
 <script>
 export default {
   props: {
@@ -35,30 +34,28 @@ export default {
   },
   methods: {
     getRankCls(index) {
-      if(index <= 2) {
+      if (index <= 2) {
         return `icon icon${index}`
-      }else {
+      } else {
         return 'text'
       }
     },
     getRankText(index) {
-      if(index > 2) {
+      if (index > 2) {
         return index + 1
       }
     },
     getDesc(song) {
-      return `${song.singer}·${song.album}`;
+      return `${song.singer}·${song.album}`
     },
     selectItem(item, index) {
-      console.log("我被点了");
-      this.$emit("select", item, index);
+      console.log('我被点了')
+      this.$emit('select', item, index)
     }
-    //基础组件，不写复杂业务逻辑，仅仅派发事件
+    // 基础组件，不写复杂业务逻辑，仅仅派发事件
   }
-};
+}
 </script>
-
-
 
 <style lang="scss" scoped>
 @import "commons/style/variable.scss";

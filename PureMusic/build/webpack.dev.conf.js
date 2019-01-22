@@ -17,7 +17,6 @@ const axios = require('axios')
 // const app = express()
 // const apiRoutes = express.Router()
 
-
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
@@ -27,7 +26,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
   // these devServer options should be customized in /config/index.js
   devServer: {
-    before(app) {
+    before (app) {
       // app.use('/api', apiRoutes)
       console.log(' before app')
       app.get('/api/music', (req, res) => {
@@ -82,7 +81,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           res.json(ret)
         }).catch((e) => {
           console.log(e)
-        })        
+        })
       })
       // search
       app.get('/api/search', (req, res) => {
@@ -138,11 +137,11 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           params: req.query
         }).then(response => {
           let ret = response.data
-          //对返回的jsonpcallback进行处理
+          // 对返回的jsonpcallback进行处理
           if (typeof ret === 'string') {
             // ^\w+单词多个
-            //\(\)匹配括号
-            //[^()]表示不是()的
+            // \(\)匹配括号
+            // [^()]表示不是()的
             let reg = /^\w+\(({[^()]+})\)$/
             let matches = ret.match(reg)
             if (matches) {
@@ -159,8 +158,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     clientLogLevel: 'warning',
     historyApiFallback: {
       rewrites: [
-        { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
-      ],
+        { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') }
+      ]
     },
     hot: true,
     contentBase: false, // since we use CopyWebpackPlugin.
@@ -176,8 +175,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     // clientLogLevel: 'error',
     watchOptions: {
-      poll: config.dev.poll,
-    },
+      poll: config.dev.poll
+    }
 
   },
   plugins: [
@@ -218,7 +217,7 @@ module.exports = new Promise((resolve, reject) => {
       // Add FriendlyErrorsPlugin
       devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
         compilationSuccessInfo: {
-          messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
+          messages: [`Your application is running here: http://localhost:${port}`]
         },
         onErrors: config.dev.notifyOnErrors
           ? utils.createNotifierCallback()

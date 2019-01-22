@@ -2,7 +2,7 @@ var express = require('express')
 var config = require('./config/index')
 var axios = require('axios')
 
-var app= express()
+var app = express()
 var apiRoutes = express.Router()
 
 app.use('/api', apiRoutes)
@@ -60,7 +60,7 @@ apiRoutes.get('/getDiscInfo', (req, res) => {
     res.json(ret)
   }).catch((e) => {
     console.log(e)
-  })        
+  })
 })
 // search
 apiRoutes.get('/search', (req, res) => {
@@ -116,11 +116,11 @@ apiRoutes.get('/getLyric', (req, res) => {
     params: req.query
   }).then(response => {
     let ret = response.data
-    //对返回的jsonpcallback进行处理
+    // 对返回的jsonpcallback进行处理
     if (typeof ret === 'string') {
       // ^\w+单词多个
-      //\(\)匹配括号
-      //[^()]表示不是()的
+      // \(\)匹配括号
+      // [^()]表示不是()的
       let reg = /^\w+\(({[^()]+})\)$/
       let matches = ret.match(reg)
       if (matches) {
@@ -134,15 +134,12 @@ apiRoutes.get('/getLyric', (req, res) => {
   })
 })
 
-
-
-
 var port = process.env.PORT | config.build.port
 
-module.exports = app.listen(port, (err)=>{
-  if(err) {
+module.exports = app.listen(port, (err) => {
+  if (err) {
     console.log(err)
     return
   }
-  console.log('Listening at http://localhost: '+port+'\n')
+  console.log('Listening at http://localhost: ' + port + '\n')
 })

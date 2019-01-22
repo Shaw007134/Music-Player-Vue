@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import {getTopList} from 'api/rank'
-import {ERR_OK} from 'api/config'
-import Scroll from "base/scroll/scroll"
+import { getTopList } from 'api/rank'
+import { ERR_OK } from 'api/config'
+import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
-import {playlistMixin} from "commons/js/mixin"
-import {mapMutations} from 'vuex'
+import { playlistMixin } from 'commons/js/mixin'
+import { mapMutations } from 'vuex'
 export default {
   mixins: [playlistMixin],
   created() {
@@ -49,9 +49,9 @@ export default {
       })
       this.setTopList(item)
     },
-    _getTopList(){
+    _getTopList() {
       getTopList().then((res) => {
-        if(res.code=== ERR_OK) {
+        if (res.code === ERR_OK) {
           this.topList = res.data.topList
           console.log(this.topList)
         }
@@ -65,7 +65,7 @@ export default {
     Scroll,
     Loading
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -119,4 +119,3 @@ export default {
   }
 }
 </style>
-

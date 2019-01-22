@@ -35,67 +35,67 @@
 </template>
 
 <script>
-import SearchBox from "base/search-box/search-box";
-import { getHotKey } from "api/search";
-import { ERR_OK } from "api/config";
-import Suggest from "components/suggest/suggest";
-import { mapActions, mapGetters } from "vuex";
-import SearchList from "base/search-list/search-list";
-import Confirm from "base/confirm/confirm";
-import Scroll from "base/scroll/scroll";
-import { playlistMixin, searchMixin } from "commons/js/mixin";
+import SearchBox from 'base/search-box/search-box'
+import { getHotKey } from 'api/search'
+import { ERR_OK } from 'api/config'
+import Suggest from 'components/suggest/suggest'
+import { mapActions, mapGetters } from 'vuex'
+import SearchList from 'base/search-list/search-list'
+import Confirm from 'base/confirm/confirm'
+import Scroll from 'base/scroll/scroll'
+import { playlistMixin, searchMixin } from 'commons/js/mixin'
 
 export default {
   mixins: [playlistMixin, searchMixin],
   created() {
-    this._getHotKey();
+    this._getHotKey()
   },
   data() {
     return {
-      hotKey: [],
-    };
+      hotKey: []
+    }
   },
   computed: {
-    //对于异步操作，可以将其作为计算属性，确保其实时更新
+    // 对于异步操作，可以将其作为计算属性，确保其实时更新
     shortcut() {
       return this.hotKey.concat(this.searchHistory)
     },
-    ...mapGetters(["searchHistory"])
+    ...mapGetters(['searchHistory'])
   },
   methods: {
     handlePlaylist(playlist) {
       console.log(playlist.length)
-      //这里更改好像无效？
-      const bottom = playlist.length > 0 ? "60px" : "";
-      this.$refs.shortcutWrapper.style.bottom = bottom;
+      // 这里更改好像无效？
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.shortcutWrapper.style.bottom = bottom
       this.$refs.shortcut.refresh()
 
-      this.$refs.searchResult.style.bottom = bottom;
+      this.$refs.searchResult.style.bottom = bottom
       this.$refs.suggest.refresh()
-      //通过suggest进行一层事件代理
+      // 通过suggest进行一层事件代理
     },
     showConfirm() {
-      this.$refs.confirm.show();
+      this.$refs.confirm.show()
     },
     _getHotKey() {
       getHotKey().then(res => {
         if (res.code === ERR_OK) {
-          console.log(res.data);
-          this.hotKey = res.data.hotkey.slice(0, 10);
+          console.log(res.data)
+          this.hotKey = res.data.hotkey.slice(0, 10)
         }
-      });
+      })
     },
     ...mapActions([
-      "clearSearchHistory"
+      'clearSearchHistory'
     ])
   },
   watch: {
-    //无法及时更新时，可进行watch，强制刷新
+    // 无法及时更新时，可进行watch，强制刷新
     query(newQuery) {
-      if(!newQuery) {
-        setTimeout(()=>{
+      if (!newQuery) {
+        setTimeout(() => {
           this.$refs.shortcut.refresh()
-        },20 )
+        }, 20)
       }
     }
   },
@@ -106,7 +106,7 @@ export default {
     Confirm,
     Scroll
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

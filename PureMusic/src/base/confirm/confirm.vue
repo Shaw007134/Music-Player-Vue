@@ -16,25 +16,25 @@
 
 <script>
 export default {
-  //state props data methods events 内部逻辑 与 外部通信
+  // state props data methods events 内部逻辑 与 外部通信
   props: {
     text: {
       type: String,
-      default: ""
+      default: ''
     },
     confirmBtnText: {
       type: String,
-      default: "确定"
+      default: '确定'
     },
     cancleBtnText: {
       type: String,
-      default: "取消"
+      default: '取消'
     }
   },
   data() {
     return {
       showFlag: false
-    };
+    }
   },
   methods: {
     show() {
@@ -45,14 +45,14 @@ export default {
     },
     cancle() {
       this.hide()
-      this.$emit("cancle")
+      this.$emit('cancle')
     },
     confirm() {
       this.hide()
-      this.$emit("confirm")
+      this.$emit('confirm')
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -130,4 +130,3 @@ export default {
   }
 }
 </style>
-

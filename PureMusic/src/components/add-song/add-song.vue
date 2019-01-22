@@ -56,16 +56,16 @@
 </template>
 
 <script>
-import SearchBox from "base/search-box/search-box";
-import Suggest from "components/suggest/suggest";
-import { searchMixin } from "commons/js/mixin";
-import Switches from "base/switches/switches";
-import Scroll from "base/scroll/scroll";
-import { mapGetters, mapActions } from "vuex";
-import SongList from "base/song-list/song-list";
-import SearchList from "base/search-list/search-list";
-import TopTip from "base/top-tip/top-tip";
-import Song from "commons/js/song";
+import SearchBox from 'base/search-box/search-box'
+import Suggest from 'components/suggest/suggest'
+import { searchMixin } from 'commons/js/mixin'
+import Switches from 'base/switches/switches'
+import Scroll from 'base/scroll/scroll'
+import { mapGetters, mapActions } from 'vuex'
+import SongList from 'base/song-list/song-list'
+import SearchList from 'base/search-list/search-list'
+import TopTip from 'base/top-tip/top-tip'
+import Song from 'commons/js/song'
 export default {
   mixins: [searchMixin],
   data() {
@@ -73,43 +73,43 @@ export default {
       showFlag: false,
       showSinger: false,
       currentIndex: 0,
-      switches: [{ name: "最近播放" }, { name: "搜索历史" }]
-    };
+      switches: [{ name: '最近播放' }, { name: '搜索历史' }]
+    }
   },
   computed: {
-    ...mapGetters(["playHistory"])
+    ...mapGetters(['playHistory'])
   },
   methods: {
     show() {
-      this.showFlag = true;
+      this.showFlag = true
       setTimeout(() => {
         if (this.currentIndex === 0) {
-          this.$refs.songList.refresh();
+          this.$refs.songList.refresh()
         } else {
-          this.$refs.searchList.refresh();
+          this.$refs.searchList.refresh()
         }
-      }, 20);
+      }, 20)
     },
     hide() {
-      this.showFlag = false;
+      this.showFlag = false
     },
     switchItem(index) {
-      this.currentIndex = index;
+      this.currentIndex = index
     },
     selectSong(song, index) {
       if (index !== 0) {
-        this.insertSong(new Song(song));
-        this.showTip();
+        this.insertSong(new Song(song))
+        this.showTip()
       }
     },
     selectSuggest() {
-      this.saveSearch();
-      this.showTip();
+      this.saveSearch()
+      this.showTip()
     },
     showTip() {
-      this.$refs.topTip.show();
+      this.$refs.topTip.show()
     },
-    ...mapActions(["insertSong"])
+    ...mapActions(['insertSong'])
   },
   components: {
     SearchBox,
@@ -120,7 +120,7 @@ export default {
     SearchList,
     TopTip
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

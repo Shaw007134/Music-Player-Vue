@@ -1,5 +1,5 @@
-import {playMode} from 'commons/js/config'
-import {loadSearch,loadPlay,loadFavorite} from 'commons/js/cache'
+import { playMode } from 'commons/js/config'
+import { loadSearch, loadPlay, loadFavorite } from 'commons/js/cache'
 const state = {
   singer: {},
   playing: false,

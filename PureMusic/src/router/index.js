@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import Vue from 'vue'
+import Router from 'vue-router'
 // import Recommend from 'components/recommend/recommend';
 // import Singer from 'components/singer/singer';
 // import Rank from 'components/rank/rank';
@@ -8,11 +8,10 @@ import Router from 'vue-router';
 // import Disc from 'components/disc/disc'
 // import TopList from 'components/top-list/top-list'
 // import UserCenter from 'components/user-center/user-center'
-Vue.use(Router);
+Vue.use(Router)
 
-
-//添加路由懒加载
-//每个组件异步加载
+// 添加路由懒加载
+// 每个组件异步加载
 const Recommend = (resolve) => {
   import('components/recommend/recommend').then((module) => {
     resolve(module)
@@ -65,7 +64,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/recommend',
+      redirect: '/recommend'
     },
     {
       path: '/recommend',
@@ -111,5 +110,5 @@ export default new Router({
       path: '/user',
       component: UserCenter
     }
-  ],
-});
+  ]
+})

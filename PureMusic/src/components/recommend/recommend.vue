@@ -35,13 +35,13 @@
 </template>
 
 <script>
-import Slider from "base/slider/slider";
-import Scroll from "base/scroll/scroll";
-import Loading from "base/loading/loading";
-import { getRecommend, getDiscList } from "api/recommend";
-import { ERR_OK } from "api/config";
-import { playlistMixin } from "commons/js/mixin";
-import {mapMutations} from "vuex"
+import Slider from 'base/slider/slider'
+import Scroll from 'base/scroll/scroll'
+import Loading from 'base/loading/loading'
+import { getRecommend, getDiscList } from 'api/recommend'
+import { ERR_OK } from 'api/config'
+import { playlistMixin } from 'commons/js/mixin'
+import { mapMutations } from 'vuex'
 export default {
   mixins: [playlistMixin],
   data() {
@@ -49,19 +49,19 @@ export default {
       recommends: [],
       discList: []
       // checkLoaded: false
-    };
+    }
   },
   created() {
-    this._getRecommend();
-    this._getDiscList();
+    this._getRecommend()
+    this._getDiscList()
   },
   methods: {
     handlePlaylist(playlist) {
-      const bottom = playlist.length > 0 ? "60px" : "";
-      this.$refs.recommend.style.bottom = bottom;
-      this.$refs.scroll.refresh();
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.recommend.style.bottom = bottom
+      this.$refs.scroll.refresh()
     },
-    selectItem(item){
+    selectItem(item) {
       this.$router.push({
         path: `/recommend/${item.dissid}`
       })
@@ -70,22 +70,22 @@ export default {
     _getRecommend() {
       getRecommend().then(res => {
         if (res.code === ERR_OK) {
-          this.recommends = res.data.slider;
+          this.recommends = res.data.slider
         }
-      });
+      })
     },
     _getDiscList() {
       getDiscList().then(res => {
         if (res.code === ERR_OK) {
-          this.discList = res.data.list;
+          this.discList = res.data.list
           console.log(this.discList)
         }
-      });
+      })
     },
     loadImage() {
       if (!this.checkLoaded) {
-        this.$refs.scroll.refresh();
-        this.checkLoaded = true;
+        this.$refs.scroll.refresh()
+        this.checkLoaded = true
       }
     },
     ...mapMutations({
@@ -97,7 +97,7 @@ export default {
     Scroll,
     Loading
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

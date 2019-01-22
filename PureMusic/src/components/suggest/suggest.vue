@@ -1,10 +1,10 @@
 <template>
-  <scroll class="suggest" 
-          ref="suggest" 
-          :data="result" 
-          :beforeScroll="beforeScroll" 
+  <scroll class="suggest"
+          ref="suggest"
+          :data="result"
+          :beforeScroll="beforeScroll"
           @beforeScroll="listScroll"
-          :pullup="pullup" 
+          :pullup="pullup"
           @scrollToEnd="searchMore">
     <ul class="suggest-list">
       <li class="suggest-item" @click=selectItem(item) v-show="result" v-for="item in result" :key="item.id">
@@ -24,21 +24,21 @@
 </template>
 
 <script>
-import { search } from "api/search";
-import { ERR_OK } from "api/config";
-import { createSong } from "commons/js/song";
-import Scroll from "base/scroll/scroll";
+import { search } from 'api/search'
+import { ERR_OK } from 'api/config'
+import { createSong } from 'commons/js/song'
+import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
 import Singer from 'commons/js/singer'
-import { mapMutations,mapActions } from 'vuex';
+import { mapMutations, mapActions } from 'vuex'
 import NoResult from 'base/no-result/no-result'
-const TYPE_SINGER = "singer";
-const perpage = 20;
+const TYPE_SINGER = 'singer'
+const perpage = 20
 export default {
   props: {
     query: {
       type: String,
-      default: ""
+      default: ''
     },
     showSinger: {
       type: Boolean,
@@ -51,48 +51,48 @@ export default {
       result: [],
       pullup: true,
       beforeScroll: true,
-      hasMore: true,
-    };
+      hasMore: true
+    }
   },
   computed: {},
   methods: {
     search() {
-      this.hasMore = true;
+      this.hasMore = true
       this.page = 1
-      this.$refs.suggest.scrollTo(0,0)
+      this.$refs.suggest.scrollTo(0, 0)
       search(this.query, this.page, this.showSinger, perpage).then(res => {
         if (res.code === ERR_OK) {
-          console.log(res.data);
-          this.result = this._getResult(res.data);
-          this._checkMore(res.data);
+          console.log(res.data)
+          this.result = this._getResult(res.data)
+          this._checkMore(res.data)
         }
-      });
+      })
     },
     searchMore() {
       if (!this.hasMore) {
-        return;
+        return
       }
-      this.page++;
+      this.page++
       search(this.query, this.page, this.showSinger, perpage).then(res => {
         if (res.code === ERR_OK) {
-          console.log(res.data);
-          this.result = this.result.concat(this._getResult(res.data));
-          this._checkMore(res.data);
+          console.log(res.data)
+          this.result = this.result.concat(this._getResult(res.data))
+          this._checkMore(res.data)
         }
-      });
+      })
     },
     getIconCls(item) {
       if (item.type === TYPE_SINGER) {
-        return "icon-mine";
+        return 'icon-mine'
       } else {
-        return "icon-music";
+        return 'icon-music'
       }
     },
     getDisplayName(item) {
       if (item.type === TYPE_SINGER) {
-        return item.singername;
+        return item.singername
       } else {
-        return `${item.name} - ${item.singer}`;
+        return `${item.name} - ${item.singer}`
       }
     },
     selectItem(item) {
@@ -118,31 +118,31 @@ export default {
       this.$refs.suggest.refresh()
     },
     _checkMore(data) {
-      const song = data.song;
-      if (this.curr_num != song.cur_num) this.curr_num = song.cur_num;
+      const song = data.song
+      if (this.curr_num != song.cur_num) this.curr_num = song.cur_num
       if (
         !song.list.length ||
         song.curnum + song.curpage * perpage >= song.totalnum
       ) {
-        this.hasMore = false;
+        this.hasMore = false
       }
     },
     _getResult(data) {
-      let ret = [];
+      let ret = []
       if (this.page === 1 && data.zhida && data.zhida.singerid) {
-        ret.push({ ...data.zhida, ...{ type: TYPE_SINGER } });
+        ret.push({ ...data.zhida, ...{ type: TYPE_SINGER } })
       }
-      if (data.song) ret = ret.concat(this._normalizeSongs(data.song.list));
-      return ret;
+      if (data.song) ret = ret.concat(this._normalizeSongs(data.song.list))
+      return ret
     },
     _normalizeSongs(list) {
-      let ret = [];
+      let ret = []
       list.forEach(musicData => {
         if (musicData.songid && musicData.albumid) {
-          ret.push(createSong(musicData));
+          ret.push(createSong(musicData))
         }
-      });
-      return ret;
+      })
+      return ret
     },
     ...mapMutations({
       setSinger: 'SET_SINGER'
@@ -153,7 +153,7 @@ export default {
   },
   watch: {
     query() {
-      this.search();
+      this.search()
     }
   },
   components: {
@@ -161,7 +161,7 @@ export default {
     Loading,
     NoResult
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -205,4 +205,3 @@ export default {
   }
 }
 </style>
-

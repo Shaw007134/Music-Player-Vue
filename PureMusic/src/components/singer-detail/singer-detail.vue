@@ -10,54 +10,54 @@
         <div class="desc" v-html="desc"></div>
       </div>
     </music-list>
-      
+
   </transition>
 </template>
 
 <script>
-import {mapGetters,mapMutations} from 'vuex' 
-import {getSingerDetail} from 'api/singer'
-import {createSong} from 'commons/js/song'
-import {ERR_OK} from 'api/config'
+import { mapGetters, mapMutations } from 'vuex'
+import { getSingerDetail } from 'api/singer'
+import { createSong } from 'commons/js/song'
+import { ERR_OK } from 'api/config'
 import MusicList from 'components/music-list/music-list'
 
 export default {
   data() {
-      return {
-        songs: [],
-      }
-    },
+    return {
+      songs: []
+    }
+  },
   computed: {
-    //通过mapGetters将数据扩展到computed计算属性中
+    // 通过mapGetters将数据扩展到computed计算属性中
     ...mapGetters([
-      //数组内设置映射，映射属性到对应的getter，返回对应的计算值
-      //相当于在Vue实例中挂载了一个叫singer的属性,实例中可使用该属性
+      // 数组内设置映射，映射属性到对应的getter，返回对应的计算值
+      // 相当于在Vue实例中挂载了一个叫singer的属性,实例中可使用该属性
       'singer'
     ]),
     name() {
-      return this.singer.name;
+      return this.singer.name
     },
     fans() {
-      let num = this.singer.fans;
+      let num = this.singer.fans
       try {
         if (num.toString().length > 5) {
-          return "粉丝: " + (num / 10000 | 0) + "万人"
-        }else {
-          return "粉丝: " + num + "人"
+          return '粉丝: ' + (num / 10000 | 0) + '万人'
+        } else {
+          return '粉丝: ' + num + '人'
         }
       } catch (error) {
-          return "粉丝: " + 0 + "人"
+        return '粉丝: ' + 0 + '人'
       }
     },
     desc() {
-      return this.singer.desc;
+      return this.singer.desc
     },
     avatar() {
-      return this.singer.avatar;
+      return this.singer.avatar
     },
     bgStyle() {
-      return `background-image:url(${this.singer.avatar})`;
-    },
+      return `background-image:url(${this.singer.avatar})`
+    }
   },
   created() {
     this._getDetail()
@@ -67,12 +67,12 @@ export default {
       updateSinger: 'UPDATE_SINGER'
     }),
     _getDetail() {
-      if(!this.singer.id) {
+      if (!this.singer.id) {
         this.$router.push('/singer')
         return
       }
       getSingerDetail(this.singer.id).then((res) => {
-        if(res.code === ERR_OK){
+        if (res.code === ERR_OK) {
           let objs = {
             desc: res.data.SingerDesc,
             fans: res.data.fans
@@ -85,14 +85,14 @@ export default {
     _normalizeSongs(list) {
       let ret = []
       list.forEach((item) => {
-        let {musicData} = item
-        //判断
-        if(musicData.songid && musicData.albumid) {
+        let { musicData } = item
+        // 判断
+        if (musicData.songid && musicData.albumid) {
           ret.push(createSong(musicData))
         }
       })
       return ret
-    },
+    }
   },
   components: {
     MusicList
@@ -103,7 +103,6 @@ export default {
 <style lang="scss" scoped>
 @import "commons/style/variable.scss";
 @import "commons/style/mixin.scss";
-
 
 .slide-enter-active, .slide-leave-active{
   transition: all 0.3s;
@@ -126,11 +125,11 @@ export default {
       flex-direction: column;
       // align-items: center;
       justify-content: center;
-      @include ellipsis();
       .name {
         line-height: 40px;
         font-size: $font-size-large;
         color: $color-text;
+        // @include ellipsis();
       }
       .fans {
         font-size: $font-size-medium;

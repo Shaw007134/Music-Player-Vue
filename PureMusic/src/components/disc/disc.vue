@@ -18,83 +18,82 @@
 </template>
 
 <script>
-import MusicList from "components/music-list/music-list";
-import { mapGetters, mapMutations } from "vuex";
-import { getDiscInfo } from "api/disc";
-import { ERR_OK } from "api/config";
-import { createSong } from "commons/js/song";
+import MusicList from 'components/music-list/music-list'
+import { mapGetters } from 'vuex'
+import { getDiscInfo } from 'api/disc'
+import { ERR_OK } from 'api/config'
+import { createSong } from 'commons/js/song'
 export default {
   data() {
     return {
       songs: [],
       avatar: {},
-      desc: ""
-    };
+      desc: ''
+    }
   },
   computed: {
     title() {
-      return this.disc.dissname;
+      return this.disc.dissname
     },
     bgImage() {
-      return this.disc.imgurl;
+      return this.disc.imgurl
     },
     bgStyle() {
       return `
       background-image:url(${this.disc.imgurl});
-      `;
+      `
     },
     listennum() {
-      let num = this.disc.listennum;
+      let num = this.disc.listennum
       try {
         if (num.toString().length > 5) {
-          return "播放量: " + ((num / 10000) | 0) + "万次";
+          return '播放量: ' + ((num / 10000) | 0) + '万次'
         } else {
-          return "播放量: " + num + "次";
+          return '播放量: ' + num + '次'
         }
       } catch (error) {
-        return "播放量: " + 0 + "次";
+        return '播放量: ' + 0 + '次'
       }
     },
-    ...mapGetters(["disc"])
+    ...mapGetters(['disc'])
   },
   created() {
-    this._getDetail();
+    this._getDetail()
   },
   methods: {
     _getDetail() {
-      let id = this.disc.dissid;
+      let id = this.disc.dissid
       if (!id) {
-        this.$router.back();
-        return;
+        this.$router.back()
+        return
       }
       getDiscInfo(id).then(res => {
         if (res.code === ERR_OK) {
-          let cd = res.cdlist[0];
-          this.desc = cd.desc;
-          this.avatar.img = cd.headurl;
-          this.avatar.name = cd.nickname;
+          let cd = res.cdlist[0]
+          this.desc = cd.desc
+          this.avatar.img = cd.headurl
+          this.avatar.name = cd.nickname
           // setTimeout(() => {
-            this.songs = this._normalizeSongs(cd.songlist);
+          this.songs = this._normalizeSongs(cd.songlist)
           // }, 300);
         }
-      });
+      })
     },
     _normalizeSongs(list) {
-      let ret = [];
+      let ret = []
       list.forEach(musicData => {
         if (musicData.songmid && musicData.albummid) {
-          ret.push(createSong(musicData));
+          ret.push(createSong(musicData))
         }
-      });
-      return ret;
+      })
+      return ret
     }
   },
   components: {
     MusicList
   }
-};
+}
 </script>
-
 
 <style lang="scss" scoped>
 @import "commons/style/variable.scss";
@@ -121,11 +120,12 @@ export default {
     flex-direction: column;
     // align-items: center;
     justify-content: center;
-    @include ellipsis();
+    // @include ellipsis();
     .name {
       line-height: 32px;
       font-size: $font-size-large;
       color: $color-text;
+      @include ellipsis(1);
     }
     .creator {
       display: flex;
@@ -156,5 +156,3 @@ export default {
   }
 }
 </style>
-
-

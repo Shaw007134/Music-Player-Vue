@@ -14,76 +14,76 @@
 </template>
 
 <script>
-import MusicList from "components/music-list/music-list";
-import { mapGetters } from "vuex";
-import { getTopList_F } from "api/rank";
-import { ERR_OK } from "api/config";
-import { createSong } from "commons/js/song";
+import MusicList from 'components/music-list/music-list'
+import { mapGetters } from 'vuex'
+import { getTopListFull } from 'api/rank'
+import { ERR_OK } from 'api/config'
+import { createSong } from 'commons/js/song'
 export default {
   data() {
     return {
       songs: [],
-      desc: "",
+      desc: '',
       rank: true
-    };
+    }
   },
   computed: {
     title() {
-      return this.topList.topTitle;
+      return this.topList.topTitle
     },
     bgStyle() {
       if (this.songs.length) {
-        return `background-image:url(${this.songs[0].image})`;
+        return `background-image:url(${this.songs[0].image})`
       }
     },
     bgImage() {
-      return this.topList.picUrl;
+      return this.topList.picUrl
     },
     listennum() {
-      let num = this.topList.listenCount;
+      let num = this.topList.listenCount
       try {
         if (num.toString().length > 5) {
-          return "播放量: " + ((num / 10000) | 0) + "万次";
+          return '播放量: ' + ((num / 10000) | 0) + '万次'
         } else {
-          return "播放量: " + num + "次";
+          return '播放量: ' + num + '次'
         }
       } catch (error) {
-        return "播放量: " + 0 + "次";
+        return '播放量: ' + 0 + '次'
       }
     },
-    ...mapGetters(["topList"])
+    ...mapGetters(['topList'])
   },
   created() {
-    this._getDetail();
+    this._getDetail()
   },
   methods: {
     _getDetail() {
       if (!this.topList.id) {
-        this.$router.push("/rank");
-        return;
+        this.$router.push('/rank')
+        return
       }
-      getTopList_F(this.topList.id).then(res => {
+      getTopListFull(this.topList.id).then(res => {
         if (res.code === ERR_OK) {
-          this.desc = res.topinfo.info;
-          this.songs = this._normalizeSong(res.songlist);
+          this.desc = res.topinfo.info
+          this.songs = this._normalizeSong(res.songlist)
         }
-      });
+      })
     },
     _normalizeSong(list) {
-      let ret = [];
+      let ret = []
       list.forEach(item => {
-        const musicData = item.data;
+        const musicData = item.data
         if (musicData.songid && musicData.albumid) {
-              ret.push(createSong(musicData));
+          ret.push(createSong(musicData))
         }
-      });
-      return ret;
+      })
+      return ret
     }
   },
   components: {
     MusicList
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -111,7 +111,7 @@ export default {
     flex-direction: column;
     // align-items: center;
     justify-content: center;
-    @include ellipsis();
+    // @include ellipsis();
     .name {
       line-height: 32px;
       font-size: $font-size-large;

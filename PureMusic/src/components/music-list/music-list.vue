@@ -38,18 +38,18 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import Scroll from "base/scroll/scroll";
-import SongList from "base/song-list/song-list";
-import { prefixStyle } from "commons/js/dom";
-import Loading from "base/loading/loading";
-import { playlistMixin } from "commons/js/mixin";
-const RESERVED_HEIGHT = 38;
-const transform = prefixStyle("transform");
-const backdrop = prefixStyle("backdrop-filter");
+import { mapGetters, mapActions } from 'vuex'
+import Scroll from 'base/scroll/scroll'
+import SongList from 'base/song-list/song-list'
+import { prefixStyle } from 'commons/js/dom'
+import Loading from 'base/loading/loading'
+import { playlistMixin } from 'commons/js/mixin'
+const RESERVED_HEIGHT = 38
+const transform = prefixStyle('transform')
+const backdrop = prefixStyle('backdrop-filter')
 export default {
   mixins: [playlistMixin],
-  //插入mixin，同名方法覆盖，注意可能有多个mixin
+  // 插入mixin，同名方法覆盖，注意可能有多个mixin
   props: {
     songs: {
       type: Array,
@@ -67,90 +67,90 @@ export default {
   data() {
     return {
       scrollY: 0
-    };
+    }
   },
   created() {
-    this.probeType = 3;
-    this.listenScroll = true;
+    this.probeType = 3
+    this.listenScroll = true
   },
   mounted() {
-    this.imageHeight = this.$refs.bgImage.clientHeight;
-    this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT;
-    this.$refs.list.$el.style.top = `${this.imageHeight}px`;
+    this.imageHeight = this.$refs.bgImage.clientHeight
+    this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT
+    this.$refs.list.$el.style.top = `${this.imageHeight}px`
   },
   computed: {
     ...mapGetters([
-      //数组内设置映射，映射属性到对应的getter，返回对应的计算值
-      //相当于在Vue实例中挂载了一个叫singer的属性,实例中可使用该属性
-      "singer"
-    ]),
+      // 数组内设置映射，映射属性到对应的getter，返回对应的计算值
+      // 相当于在Vue实例中挂载了一个叫singer的属性,实例中可使用该属性
+      'singer'
+    ])
     // bgStyle() {
     //   return `background-image:url(${this.singer.avatar})`;
     // },
-    
+
   },
   methods: {
     handlePlaylist(playlist) {
-      const bottom = playlist.length > 0 ? "60px" : "";
-      this.$refs.list.$el.style.bottom = bottom;
-      this.$refs.list.refresh();
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.list.$el.style.bottom = bottom
+      this.$refs.list.refresh()
     },
     scroll(pos) {
-      this.scrollY = pos.y;
+      this.scrollY = pos.y
     },
     back() {
-      this.$router.back();
+      this.$router.back()
     },
-    //这里不需要关系item，但子组件要尽可能把信息传递出去
+    // 这里不需要关系item，但子组件要尽可能把信息传递出去
     selectItem(item, index) {
-      console.log(index);
+      console.log(index)
       this.selectPlay({
         list: this.songs.slice(),
         // list: JSON.parse(JSON.stringify(this.songs)),
         index
-      });
+      })
     },
     random() {
       this.randomPlay({
         list: this.songs.slice()
         // list: JSON.parse(JSON.stringify(this.songs))
-      });
+      })
     },
-    ...mapActions(["selectPlay", "randomPlay"])
+    ...mapActions(['selectPlay', 'randomPlay'])
   },
   watch: {
     scrollY(newY) {
-      let zIndex = 0;
-      let scale = 1;
-      let blur = 0;
-      let translateY = Math.max(this.minTranslateY, newY);
-      this.$refs.layer.style[transform] = `translate3d(0,${translateY}px,0)`;
-      const percent = Math.abs(newY / this.imageHeight);
+      let zIndex = 0
+      let scale = 1
+      let blur = 0
+      let translateY = Math.max(this.minTranslateY, newY)
+      this.$refs.layer.style[transform] = `translate3d(0,${translateY}px,0)`
+      const percent = Math.abs(newY / this.imageHeight)
 
       if (newY > 0) {
-        scale = 1 + percent;
-        zIndex = 10;
+        scale = 1 + percent
+        zIndex = 10
       } else {
-        blur = Math.min(20 * percent, 20);
+        blur = Math.min(20 * percent, 20)
       }
-      this.$refs.filter.style[backdrop] = `blur(${blur}px)`;
+      this.$refs.filter.style[backdrop] = `blur(${blur}px)`
       if (newY < this.minTranslateY) {
-        zIndex = 10;
-        this.$refs.bgImage.style.paddingTop = 0;
-        this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`;
-        this.$refs.playBtn.style.display = "none";
-        this.$refs.album.style.display = "none";
+        zIndex = 10
+        this.$refs.bgImage.style.paddingTop = 0
+        this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
+        this.$refs.playBtn.style.display = 'none'
+        this.$refs.album.style.display = 'none'
       } else {
-        this.$refs.bgImage.style.paddingTop = "62%";
-        this.$refs.bgImage.style.height = 0;
-        this.$refs.playBtn.style.display = "";
-        this.$refs.album.style.display = "";
+        this.$refs.bgImage.style.paddingTop = '62%'
+        this.$refs.bgImage.style.height = 0
+        this.$refs.playBtn.style.display = ''
+        this.$refs.album.style.display = ''
         // if(this.$refs.album.style.zIndex != 10){
         //   this.$refs.album.style.zIndex = 10
         // } 10
       }
-      this.$refs.bgImage.style[transform] = `scale(${scale})`;
-      this.$refs.bgImage.style.zIndex = zIndex;
+      this.$refs.bgImage.style[transform] = `scale(${scale})`
+      this.$refs.bgImage.style.zIndex = zIndex
     }
   },
   components: {
@@ -158,7 +158,7 @@ export default {
     SongList,
     Loading
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -280,4 +280,3 @@ export default {
   }
 }
 </style>
-

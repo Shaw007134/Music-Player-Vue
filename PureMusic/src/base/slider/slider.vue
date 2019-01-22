@@ -10,13 +10,13 @@
 </template>
 
 <script>
-import BScroll from "better-scroll";
-import {addClass} from "commons/js/dom";
+import BScroll from 'better-scroll'
+import { addClass } from 'commons/js/dom'
 export default {
   data() {
     return {
       dots: [],
-      currentPageIndex: 0,
+      currentPageIndex: 0
     }
   },
   props: {
@@ -31,20 +31,20 @@ export default {
     interval: {
       type: Number,
       default: 3000
-    },
+    }
   },
   mounted() {
     setTimeout(() => {
-      this._setSliderWidth();
-      this._initDots();
-      this._initSlider();
+      this._setSliderWidth()
+      this._initDots()
+      this._initSlider()
 
-      if(this.autoPlay){
+      if (this.autoPlay) {
         this._play()
       }
     }, 20)
-    //browser default refresh time is at least 17ms
-    window.addEventListener('resize',() => {
+    // browser default refresh time is at least 17ms
+    window.addEventListener('resize', () => {
       if (!this.slider) {
         return
       }
@@ -53,42 +53,42 @@ export default {
     })
   },
   methods: {
-    _setSliderWidth(isResize){
-      this.children = this.$refs.sliderGroup.children;
+    _setSliderWidth(isResize) {
+      this.children = this.$refs.sliderGroup.children
 
-      let width = 0;
-      let sliderWidth = this.$refs.slider.clientWidth;
-      for(let i=0; i<this.children.length;i++){
-        let child = this.children[i];
-        addClass(child,'slider-item');
-        child.style.width = sliderWidth + 'px';
-        width += sliderWidth;
+      let width = 0
+      let sliderWidth = this.$refs.slider.clientWidth
+      for (let i = 0; i < this.children.length; i++) {
+        let child = this.children[i]
+        addClass(child, 'slider-item')
+        child.style.width = sliderWidth + 'px'
+        width += sliderWidth
       }
 
-      if(this.loop && !isResize){
-        width += 2 * sliderWidth;
+      if (this.loop && !isResize) {
+        width += 2 * sliderWidth
       }
       this.$refs.sliderGroup.style.width = width + 'px'
     },
-    _initDots(){
+    _initDots() {
       this.dots = new Array(this.children.length)
     },
     _initSlider() {
-      this.slider = new BScroll(this.$refs.slider,{
+      this.slider = new BScroll(this.$refs.slider, {
         scrollX: true,
         scrollY: false,
         momentum: false,
         snap: {
           loop: this.loop,
           threshold: 0.3,
-          speed: 400,
+          speed: 400
         },
-        click: true,
+        click: true
       })
 
-      this.slider.on('scrollEnd',() => {
-        const pageIndex = this.slider.getCurrentPage().pageX;
-        this.currentPageIndex = pageIndex;
+      this.slider.on('scrollEnd', () => {
+        const pageIndex = this.slider.getCurrentPage().pageX
+        this.currentPageIndex = pageIndex
         if (this.autoPlay) {
           clearTimeout(this.timer)
           this._play()
@@ -97,15 +97,14 @@ export default {
     },
     _play() {
       this.timer = setTimeout(() => {
-        this.slider.next();
-      },this.interval)
+        this.slider.next()
+      }, this.interval)
     }
   },
   destroyed() {
     clearTimeout(this.timer)
-  },
+  }
 }
-
 
 </script>
 
