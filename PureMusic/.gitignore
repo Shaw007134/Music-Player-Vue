@@ -1,6 +1,6 @@
 .DS_Store
 node_modules/
-# /dist/
+/dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -12,3 +12,6 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+
+
+ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDbh0oPoRCWCPsGVH48otvKc376ssF3gZqmXtxY0Vv0Uu6275wk/0dvp/UWm+T1dxeUPcu1IJuE1F2mVL1xDaH8wDLP42RZkLYHtCVwzZEyd5+0IUUUHfy5ay7wr1rfku7DqEDEHxr1G+SNaQZSzjQO01sjIBt1mxyM9gv5HcMi0+ekv6TmZD21/ehvb0UnmWMODAt073tGiC76oLe6bU7ne6Tqs4DPHkL68poOhcFi9WCw0k3rT+ES/rGpMk7rrn8a9lT8PuaxeT5HBHCjJUpZ225wchoAoRJo+DdZPp6nGpjc6QtZCBYd/QNZeS9xbDRAK/06Hgkm+uW+4i2HL3633khK5WT7nBis/MkcyjjkFnftqf7bjnv97X1oZmY4VJCzw7uQz60yjwd7joIfhCXOAIT0FceOyVACKaBX4nVIrvuSLz9xbgmvCHN0opBUzId7YH2Y+S2MZPY3oGXAxlYiF7783t3fVZ0ui2ccD7zTrFD7iYRWKYM5hfXF+BUP9TbOtL9yN0xU5YCAcaQH7s/5KoNmRm9ci0PQI6QGXzcxJRiqN91Xn686vbQ61sawFeOEiFPyS/87Pr2No32IHjLxTIG7AdPOoNZZy+O8g9JJIWhd0qVRmvbdVMGnYrTWBVVlgaNsEkVC37hKqw96SkAslVG2T/BT9O1aHKqmA9iGLQ== gggshaw007@gmail.com
