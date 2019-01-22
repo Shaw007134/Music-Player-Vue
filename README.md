@@ -2,7 +2,7 @@
 
 ------
 
- [![Build Status](https://camo.githubusercontent.com/cfcaf3a99103d61f387761e5fc445d9ba0203b01/68747470733a2f2f7472617669732d63692e6f72672f6477796c2f657374612e7376673f6272616e63683d6d6173746572)](https://travis-ci.org/dwyl/esta)  [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+  [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ##### Intro
 
@@ -10,17 +10,105 @@ A Music Player made with Vue, learning purpose.
 
 This player get the online music data from the API of QQ Music, and It has the following features:
 
-1. Get access to the popular playlists made by other users as well as most popular singers with their songs from A-Z.
-2. Search module, you can search any songs and with the hotkey and shortcut module, you can just click the name of song.
-3. Playlist module, with random / sequence / loop mode, you can add or remove song to the playlist at any time or add song to the favorite list.
-4. Cache module, it will save your play history / search history
-5. Lyric module, auto scroll with the current time of the song.
+- Browse Songs, Albums, Artists and Top lists
+- Create and edit playlists
+- Three different play modes - Sequence / Random / Loop
+- Lyric support
+- Search support
+- Cache, save playing history and search history
+
+
 
 ##### 
 
+##### Preview
+
+More details, please click 👉  [here](http://47.104.228.220:9000/#/recommend) for online preview.
+
+![Demo](./PureMusic/PureMusic.gif)
 
 
 
+#####
+
+##### Libraries and tools used in the project
+
+- [x] ES6 / CSS3
+
+- [x] Vue, Vuex, Vue Router and Vue-CLI (webpack)
+
+  ---- Vuex: manage the states, share states from different components, mutations and actions to modify states.
+
+  ---- Vue Router: use router push, router to, router-link to implement the page jumping. 
+
+- [x] Lyric-Parser and BetterScroll
+
+  ---- handle the scroll module
+
+- [x] JSONP / AXIOS
+
+  ---- handle http requests and CORS
+
+- [x] Node.js and Express
+
+  ---- Build the server in the cloud
+
+- [x] Mixin, Debounce and Code spliting
+
+  ---- use scss mixin and vue mixin to improve component availability 
+
+  ---- use debounce to save the number of requests.
+
+##### 
+
+##### UI
+
+- Suggest
+  - Slider
+  - Disc (suggested albums)
+- Singer
+  - Singer details
+  - Music list
+- Top List
+  - ranking 
+- Search
+  - Hot Key
+  - Search Result / Search History
+- Player 
+  - Progress bar / Progress circle
+  - Lyric / Disk
+- User Center
+  - Play history
+  - Favorite List
 
 
+
+![structure](./PureMusic/structure.png)
+
+
+
+##### 
+
+##### Difficulties encountered 
+
+```
+1. v-for refs
+refs is not reactive, and v-for is in-patch insert
+2. webpack.dev.config
+webpack uses express as default
+insert app.use in before
+3. audio play error
+should handle Promise
+4. Constructor
+base components only handle basic things
+like new a class or emit an event
+5. Vuex mutate state
+array should use slice() to make a copy
+6. Make proper data structure
+maintain the playlist and sequencelist
+handle edge cases always
+set flag and watch proper data
+7. scroll
+should recalculate the clientHeight after dom change, or use the this.$nextTick
+```
 
