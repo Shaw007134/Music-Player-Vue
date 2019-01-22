@@ -103,7 +103,6 @@ export default {
       })
       // this.$nextTick(()=>{
       console.log(index)
- 
       console.log(this.$refs.listItem[index])
       console.log(this.sequenceList[index])
       let currentItem = this.$refs.listContent.$el.children[0].children[index]
