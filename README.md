@@ -94,20 +94,26 @@ More details, please click 👉  [here](http://47.104.228.220:9000/#/recommend) 
 ```
 1. v-for refs
 refs is not reactive, and v-for is in-patch insert
+
 2. webpack.dev.config
 webpack uses express as default
 insert app.use in before
+
 3. audio play error
 should handle Promise
+
 4. Constructor
 base components only handle basic things
 like new a class or emit an event
+
 5. Vuex mutate state
 array should use slice() to make a copy
+
 6. Make proper data structure
 maintain the playlist and sequencelist
 handle edge cases always
 set flag and watch proper data
+
 7. scroll
 should recalculate the clientHeight after dom change, or use the this.$nextTick
 ```
